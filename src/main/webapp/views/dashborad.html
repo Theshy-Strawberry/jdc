@@ -1,0 +1,130 @@
+<div style="background: #E5E9EC;margin-top: 2%;margin-left: 2%;margin-bottom: 1%;">
+    <md-content class="row" style="display:flex;background: #E5E9EC;">
+        <md-button class="md-icon-button" style="border: 1px solid #0AA699;height: 30px;min-height: 30px;width: 30px;"
+                   aria-label="Install with Bower"
+                   target="_blank"
+                   ng-href="https://github.com/angular/bower-material">
+            <md-tooltip md-autohide>首页</md-tooltip>
+            <md-icon md-svg-src="images/icons/iconfont-home.svg"
+                     style="color: #0AA699;vertical-align:super;width: 20px;height: 20px;"></md-icon>
+        </md-button>
+        <font style="margin-top: 5px;color: #37A8AF;">系统管理</font><font style="margin-top: 5px;color: #777;">&nbsp;/&nbsp;快捷菜单</font>
+    </md-content>
+</div>
+<div>
+    <md-grid-list
+            md-cols-sm="1" md-cols-md="2" md-cols-gt-md="6"
+            md-row-height="1:1"
+            md-gutter="16px" md-gutter-gt-sm="20px">
+        <md-grid-tile class="md-whiteframe-glow-z1"
+                      style="border-radius: 5px;-moz-border-radius: 5px;-webkit-border-radius: 5px;"
+                      md-rowspan="3" md-colspan="2" md-colspan-sm="1">
+            <md-list style="width: 100%;height: 100%;background: #ffffff;border: 1px solid #ddd;border-radius: 5px;
+                      -moz-border-radius: 5px;-webkit-border-radius: 5px;box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);">
+                <md-subheader class="md-no-sticky">
+                    待办任务
+                </md-subheader>
+                <md-divider></md-divider>
+                <md-list-item ng-repeat="data in todo">
+                    <md-icon md-svg-src="images/icons/iconfont-ziliaoku.svg"
+                             style="color: white;width: 18px;height: 18px;"></md-icon>
+                    <p>
+                        {{data.todo_item}}<br/>
+                        编号：{{data.project_id}}
+                    </p>
+                    <md-divider></md-divider>
+                </md-list-item>
+            </md-list>
+        </md-grid-tile>
+        <md-grid-tile class="md-whiteframe-glow-z1" ng-repeat="data in arr" ng-click="toPath(data,data.path)"
+                      style="background:linear-gradient(to right, {{data.color}}); !important;border-radius: 0%;color: white;font-size: 20px;box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);">
+            <div style="vertical-align: middle;align-items: center;">
+                <md-button>
+                    &nbsp;&nbsp;
+                    <md-icon md-svg-src="{{data.menu}}" style="color: white;width: 60px;height: 60px;">
+                        {{data.name}}
+                    </md-icon>
+                    <br/>
+                    {{data.name}}
+                </md-button>
+            </div>
+        </md-grid-tile>
+        <!--<md-grid-tile class="md-whiteframe-glow-z1"-->
+                      <!--style="background:linear-gradient(to right, #37A8AF 0%, #33AF88 100%); !important;border-radius: 0%;color: white;font-size: 20px;box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);">-->
+            <!--<div style="vertical-align: middle;align-items: center;">-->
+                <!--&nbsp;&nbsp;-->
+                <!--<md-icon md-svg-src="images/icons/iconfont-bianjimoban.svg"-->
+                         <!--style="color: white;width: 60px;height: 60px;">项目管理-->
+                <!--</md-icon>-->
+                <!--<br/>-->
+                <!--基建审计-->
+            <!--</div>-->
+        <!--</md-grid-tile>-->
+        <!--<md-grid-tile class="md-whiteframe-glow-z1"-->
+                      <!--style="background:linear-gradient(to right, #427c9d 0%, #42669d 100%); !important;border-radius: 0%;color: white;font-size: 20px;box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);">-->
+            <!--<div style="vertical-align: middle;align-items: center;">-->
+                <!--&nbsp;&nbsp;-->
+                <!--<md-icon md-svg-src="images/icons/iconfont-jingjiaziyuanwei.svg"-->
+                         <!--style="color: white;width: 60px;height: 60px;">项目管理-->
+                <!--</md-icon>-->
+                <!--<br/>-->
+                <!--选商审计-->
+            <!--</div>-->
+        <!--</md-grid-tile>-->
+        <!--<md-grid-tile class="md-whiteframe-glow-z1"-->
+                      <!--style="background:linear-gradient(to right, #f56954 0%, #f5515a 100%); !important;border-radius: 0%;color: white;font-size: 20px;box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);">-->
+            <!--<div style="vertical-align: middle;align-items: center;">-->
+                <!--&nbsp;&nbsp;-->
+                <!--<md-icon md-svg-src="images/icons/iconfont-quxiantu.svg" style="color: white;width: 60px;height: 60px;">-->
+                    <!--项目管理-->
+                <!--</md-icon>-->
+                <!--<br/>-->
+                <!--查询分析-->
+            <!--</div>-->
+        <!--</md-grid-tile>-->
+        <!--<md-grid-tile class="md-whiteframe-glow-z1"-->
+                      <!--style="background:linear-gradient(to right, #0090D9 0%, #3e72c6 100%); !important;border-radius: 0%;color: white;font-size: 20px;box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);">-->
+            <!--<div style="vertical-align: middle;align-items: center;">-->
+                <!--&nbsp;&nbsp;-->
+                <!--<md-icon md-svg-src="images/icons/iconfont-licai.svg" style="color: white;width: 60px;height: 60px;">-->
+                    <!--项目管理-->
+                <!--</md-icon>-->
+                <!--<br/>-->
+                <!--财务审计-->
+            <!--</div>-->
+        <!--</md-grid-tile>-->
+        <!--<md-grid-tile class="md-whiteframe-glow-z1"-->
+                      <!--style="background:linear-gradient(to right, #0090D9 0%, #3e72c6 100%); !important;border-radius: 0%;color: white;font-size: 20px;box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);">-->
+            <!--<div style="vertical-align: middle;align-items: center;">-->
+                <!--&nbsp;&nbsp;-->
+                <!--<md-icon md-svg-src="images/icons/iconfont-wenjian.svg" style="color: white;width: 60px;height: 60px;">-->
+                    <!--项目管理-->
+                <!--</md-icon>-->
+                <!--<br/>-->
+                <!--综合管理-->
+            <!--</div>-->
+        <!--</md-grid-tile>-->
+        <!--<md-grid-tile class="md-whiteframe-glow-z1"-->
+                      <!--style="background:linear-gradient(to right, #0090D9 0%, #3e72c6 100%); !important;border-radius: 0%;color: white;font-size: 20px;box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);">-->
+            <!--<div style="vertical-align: middle;align-items: center;">-->
+                <!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+                <!--<md-icon md-svg-src="images/icons/iconfont-tuwendianzhao.svg"-->
+                         <!--style="color: white;width: 60px;height: 60px;">项目管理-->
+                <!--</md-icon>-->
+                <!--<br/>-->
+                <!--领导工作视图-->
+            <!--</div>-->
+        <!--</md-grid-tile>-->
+        <!--<md-grid-tile class="md-whiteframe-glow-z1"-->
+                      <!--style="background:linear-gradient(to right, #0090D9 0%, #3e72c6 100%); !important;border-radius: 0%;color: white;font-size: 20px;box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);">-->
+            <!--<div style="vertical-align: middle;align-items: center;">-->
+                <!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+                <!--<md-icon md-svg-src="images/icons/iconfont-jihua.svg" style="color: white;width: 60px;height: 60px;">-->
+                    <!--项目管理-->
+                <!--</md-icon>-->
+                <!--<br/>-->
+                <!--年度审计计划-->
+            <!--</div>-->
+        <!--</md-grid-tile>-->
+    </md-grid-list>
+</div>

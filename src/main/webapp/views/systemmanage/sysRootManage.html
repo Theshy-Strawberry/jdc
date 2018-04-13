@@ -1,0 +1,98 @@
+<!-- Nested node template -->
+<script type="text/ng-template" id="nodes_renderer.html">
+    <md-button aria-label="Open demo menu" class="tree-node tree-node-content" style="width: 300px;margin: 6px 0px;"   ng-click="getAuth(this,node)">
+        <div ui-tree-handle class="tree-node tree-node-content menu-demo-container"  layout="row" layout-align="start center">
+            <a class="btn btn-success btn-xs" ng-if="node.nodes && node.nodes.length > 0" data-nodrag>
+                <span class="glyphicon"  ng-class="{'glyphicon-chevron-right': collapsed,'glyphicon-chevron-down': !collapsed}"></span>
+            </a>
+            <span ng-bind-html="node.title | highlight:pattern  | trust"></span>
+            <div style="margin-right: 200px;"></div>
+        </div>
+    </md-button>
+    <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}">
+        <li ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'"
+            ng-hide="!treeFilter(node, pattern, ['title','menu']) && !dim"
+            ng-class="{'filtered-out':!treeFilter(node, pattern, ['title','menu']) && dim}">
+        </li>
+    </ol>
+</script>
+
+<jr-navigation first="系统管理" second="权限管理"></jr-navigation>
+<div layout="column" style="background: #E5E9EC;" ng-init="dim=false;">
+    <md-content flex style="background: #E5E9EC;">
+        <md-card style="margin-top: 2px;">
+            <md-card-content>
+                <div layout="row">
+                    <!--<div flex layout="column" style="border-right: 1px solid #267ED5;width: 380px;">-->
+                        <!--<md-toolbar class="md-theme-light">-->
+                            <!--<div class="md-toolbar-tools" layout-align="left start">-->
+                                <!--<h2 class="md-flex">系统菜单</h2>-->
+                            <!--</div>-->
+                        <!--</md-toolbar>-->
+                        <!--<md-content layout-padding style="height: 600px;padding: 0px;">-->
+                            <!--<div ui-tree id="tree-root" data-drag-enabled="false">-->
+                                <!--<ol ui-tree-nodes ng-model="data">-->
+                                    <!--<li  ng-repeat="node in data" ui-tree-node ng-include="'nodes_renderer.html'"-->
+                                         <!--ng-hide="!treeFilter(node, pattern,  ['title']) && !dim"-->
+                                         <!--ng-class="{'filtered-out':!treeFilter(node, pattern,  ['title']) && dim}">-->
+                                    <!--</li>-->
+                                <!--</ol>-->
+                            <!--</div>-->
+                        <!--</md-content>-->
+                    <!--</div>-->
+                    <div flex hide-sm layout="column">
+                        <md-toolbar class="md-theme-light">
+                            <div class="md-toolbar-tools" layout-align="left start">
+                                <h2 class="md-flex">系统权限</h2>
+                                <span flex></span>
+                                待分配用户：
+                                <md-input-container flex style="padding-bottom: 1px;color: white;">
+                                    <md-select ng-model="todoUser">
+                                        <md-option ng-repeat="data in sysUsersList" value="{{data.user_name}}">{{data.real_name}}</md-option>
+                                    </md-select>
+                                </md-input-container>
+                            </div>
+                        </md-toolbar>
+                        <md-content layout-padding style="height: 600px;padding-top: 40px;" >
+                            <md-list ng-repeat="node in data">
+                                <md-subheader class="md-no-sticky" style="font-size: 17px">
+                                    <md-checkbox  ng-model="node.selected" ng-click="toggle(node)" style="font-size: 14px;">
+                                        <font color="blue" size="4px"><b>{{node.title}}</b></font>&nbsp;&nbsp;(查看权限)
+                                    </md-checkbox>
+                                </md-subheader>
+                                <md-list ng-if="node.nodes!=null" ng-repeat="node2 in node.nodes">
+                                    <md-subheader class="md-no-sticky" style="margin-left: 20px;font-size: 14px;">
+                                        <md-checkbox  ng-model="node2.selected" ng-click="toggleAll(node,node2)" style="font-size: 14px;">
+                                            <font color="#7b68ee" size="3px"><b>{{node2.title}}</b></font>&nbsp;&nbsp;(全选)
+                                        </md-checkbox>
+                                    </md-subheader>
+                                    <div flex="50" flex-md="100" layout="column">
+                                        <div layout="row" layout-wrap style="margin-right: 20px;padding-left:60px;">
+
+                                            <md-checkbox ng-repeat="data in node2.nodes" ng-model="data.selected"  ng-click="toggle(data)" style="font-size: 12px;">
+                                                {{ data.auth_name }}&nbsp;&nbsp;({{data.auth_type | authTypeFilter}})
+                                            </md-checkbox>
+                                        </div>
+                                    </div>
+                                    <md-divider></md-divider>
+                                </md-list>
+                            </md-list>
+
+                            <md-content layout-padding >
+                                <div flex="50" flex-md="100" layout="column">
+                                    <div layout="row" layout-wrap>
+                                        <div flex="50" ng-repeat="data in auths">
+                                            <md-checkbox ng-model="data.selected"  ng-click="toggle(data)">
+                                                {{ data.auth_name }}&nbsp;&nbsp;({{data.auth_type | authTypeFilter}})
+                                            </md-checkbox>
+                                        </div>
+                                    </div>
+                                </div>
+                            </md-content>
+                        </md-content>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+    </md-content>
+</div>

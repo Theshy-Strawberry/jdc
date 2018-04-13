@@ -1,0 +1,94 @@
+<jr-navigation first="系统管理" second="科室管理"></jr-navigation>
+<div layout="column" style="background: #E5E9EC;" ng-controller="OfficeManageCTRL as ctrl">
+    <md-content flex style="background: #E5E9EC;">
+        <md-card style="margin-top: 2px;">
+            <md-card-content>
+                <md-button ng-click="toggleRight()" class="md-raised" layout layout-align="center end">添加</md-button>
+            </md-card-content>
+        </md-card>
+    </md-content>
+    <section layout="row" flex>
+        <md-content flex style="background: #E5E9EC;">
+            <md-card style="margin-top: 2px;">
+                <md-card-content>
+                    <div ui-grid="gridOptions" ui-grid-pagination ui-grid-pinning
+                         ui-grid-resize-columns ui-grid-auto-resize style="height: 450px"></div>
+                </md-card-content>
+            </md-card>
+        </md-content>
+        <md-sidenav class="md-sidenav-right md-whiteframe-z2" style="min-width:800px;" md-component-id="right">
+            <form name="officeform">
+                <div layout="column">
+                    <md-content md-theme="docs-dark" layout-padding layout="row" layout-sm="column">
+                        <h2 class="md-toolbar-tools" style="text-align: center;overflow:hidden;color: white;">
+                            <span>编辑科室</span>
+                        </h2>
+                    </md-content>
+                    <md-content layout-padding>
+                        <form>
+                            <input type="hidden" ng-model="office.id">
+                            <md-input-container flex>
+                                <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                   class="md-caption md-primary">
+                                    科室名称:<font style="color: red;margin-left: 4px;">*</font></p>
+                                <input name="office_name" type="text" ng-model="office.office_name" required
+                                       md-maxlength="100">
+                                <div ng-messages="officeform.office_name.$error"
+                                     ng-show="officeform.office_name.$dirty || officeform.office_name.$touched">
+                                    <div ng-message="required">科室名称不能为空</div>
+                                    <div ng-message="md-maxlength">不能超过100个字</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container flex>
+                                <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                   class="md-caption md-primary">
+                                    科室编号:</p>
+                                <input name="office_no" type="text" ng-model="office.office_no"
+                                       md-maxlength="100">
+                                <div ng-messages="officeform.office_no.$error"
+                                     ng-show="officeform.office_no.$dirty || officeform.office_no.$touched">
+                                    <div ng-message="md-maxlength">不能超过100个字</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container flex>
+                                <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                   class="md-caption md-primary">
+                                    职能描述:</p>
+                                <textarea name="job_desc" ng-model="office.job_desc" columns="1"
+                                          md-maxlength="600 "></textarea>
+
+                                <div ng-messages="officeform.job_desc.$error"
+                                     ng-show="officeform.job_desc.$dirty || officeform.job_desc.$touched">
+                                    <div ng-message="md-maxlength">不能超过600字</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container flex md-no-float>
+                                <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                   class="md-caption md-primary">
+                                    科室业务<font style="color: red;margin-left: 4px;">*</font></p>
+                                <md-select name="office_business" placeholder="---&nbsp;请选择&nbsp;---"
+                                           ng-model="office.office_business" required>
+                                    <md-option ng-value="">---&nbsp;请选择&nbsp;---</md-option>
+                                    <md-option value="1">基建审计</md-option>
+                                    <md-option value="2">财务审计</md-option>
+                                    <md-option value="3">物资服务采购审计</md-option>
+                                    <md-option value="4">综合管理</md-option>
+                                </md-select>
+                                <div ng-messages="officeform.office_business.$error"
+                                     ng-show="officeform.office_business.$dirty || officeform.office_business.$touched">
+                                    <div ng-message="required">请选择项目分类！</div>
+                                </div>
+                            </md-input-container>
+                        </form>
+                    </md-content>
+                </div>
+            </form>
+            <md-button ng-click="close()" class="md-raised" style="float: right;">
+                关闭
+            </md-button>
+            <md-button ng-click="save()" class="md-raised" style="float: right;">
+                保存
+            </md-button>
+        </md-sidenav>
+    </section>
+</div>

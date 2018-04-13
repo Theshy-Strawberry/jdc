@@ -1,0 +1,164 @@
+<style>
+    .md-datepicker-input-container {
+        position: relative;
+        padding-bottom: 5px;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        display: inline-block;
+        width: 70%;
+        margin-left: 12px;
+    }
+</style>
+<jr-navigation first="系统管理" second="二级单位管理" ng-mousedown="mOpen($event)"></jr-navigation>
+<br>
+<div layout="column" style="background: #E5E9EC;">
+    <md-content flex style="background: #E5E9EC;">
+        <div class="md-actions" layout="row" layout-align="end left">
+            <md-button ng-click="toggleRight()" class="md-raised" layout layout-align="center end">添加</md-button>
+        </div>
+    </md-content>
+
+    <section layout="row" flex>
+        <md-content flex style="background: #E5E9EC;">
+            <md-card style="margin-top: 2px;height: 100%;">
+                <md-card-content>
+                    <div ui-grid="gridOptions" ui-grid-pagination  ui-grid-pinning
+                         ui-grid-resize-columns ui-grid-auto-resize
+                         class="grid" style="height: 450px"></div>
+                </md-card-content>
+            </md-card>
+        </md-content>
+        <md-sidenav class="md-sidenav-right md-whiteframe-z2" style="min-width:800px;" md-component-id="right">
+            <form name="unitInfoForm">
+                <div layout="column">
+                    <md-content md-theme="docs-dark" layout-padding layout="row" layout-sm="column">
+                        <h2 class="md-toolbar-tools" style="text-align: center;overflow:hidden;color: white;">
+                            <span>编辑二级单位信息</span>
+                        </h2>
+                    </md-content>
+                    <md-content layout-padding>
+                        <form name="useForm">
+                            <input type="hidden" ng-model="obj.object.id">
+                            <div layout layout-sm="column">
+                                <md-input-container flex md-no-float>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        单位名称<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <input name="unit_name" ng-model="obj.object.unit_name" aria-label="单位名称" md-maxlength="100" required>
+                                    <div ng-messages="unitInfoForm.unit_name.$error"
+                                         ng-show="unitInfoForm.unit_name.$dirty || unitInfoForm.unit_name.$touched">
+                                        <div ng-message="required">请输入单位名称！</div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container flex md-no-float>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        单位简称<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <input name="unit_short" ng-model="obj.object.unit_short" aria-label="单位简称" md-maxlength="100" required>
+                                    <div ng-messages="unitInfoForm.unit_short.$error"
+                                         ng-show="unitInfoForm.unit_short.$dirty || unitInfoForm.unit_short.$touched">
+                                        <div ng-message="required">请输入单位简称！</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                            <div layout layout-sm="column">
+                                <md-input-container flex md-no-float>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        单位类别<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <md-select name="company_type" placeholder="---&nbsp;请选择&nbsp;---" aria-label="单位类别"
+                                               ng-model="obj.object.company_type" required>
+                                        <md-option ng-value="">---&nbsp;请选择&nbsp;---</md-option>
+                                        <md-option ng-value="1">机关部门</md-option>
+                                        <md-option ng-value="2">所属单位</md-option>
+                                    </md-select>
+                                    <div ng-messages="unitInfoForm.company_type.$error"
+                                         ng-show="unitInfoForm.company_type.$dirty || unitInfoForm.company_type.$touched">
+                                        <div ng-message="required">请选择单位类别！</div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container flex md-no-float>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        是否上市<font style="color: red;margin-left: 4px;"></font></p>
+                                    <md-select name="is_public" placeholder="---&nbsp;请选择&nbsp;---" aria-label="单位类别"
+                                               ng-model="obj.object.is_public" required>
+                                        <md-option ng-value="">---&nbsp;请选择&nbsp;---</md-option>
+                                        <md-option ng-value="1">上市</md-option>
+                                        <md-option ng-value="2">未上市</md-option>
+                                    </md-select>
+                                </md-input-container>
+                            </div>
+                            <div layout layout-sm="column">
+                                <md-input-container flex md-no-float>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        业务划分<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <md-select name="business_id" placeholder="---&nbsp;请选择&nbsp;---" aria-label="单位类别"
+                                               ng-model="obj.object.business_id" required>
+                                        <md-option ng-value="">---&nbsp;请选择&nbsp;---</md-option>
+                                        <md-option ng-repeat="data in unitBusiness" ng-value="data.id">{{
+                                            data.business_type}}
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="unitInfoForm.business_id.$error"
+                                         ng-show="unitInfoForm.business_id.$dirty || unitInfoForm.business_id.$touched">
+                                        <div ng-message="required">请选择业务划分！</div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container flex md-no-float>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        单位地址<font style="color: red;margin-left: 4px;"></font></p>
+                                    <input name="address" ng-model="obj.object.address" aria-label="单位地址" md-maxlength="100">
+                                </md-input-container>
+                            </div>
+                            <div layout layout-sm="column">
+                                <md-input-container flex md-no-float>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        单位电话<font style="color: red;margin-left: 4px;"></font></p>
+                                    <input name="telephone" ng-model="obj.object.telephone" aria-label="单位电话" md-maxlength="30">
+                                </md-input-container>
+                                <md-input-container flex md-no-float>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        单位传真<font style="color: red;margin-left: 4px;"></font></p>
+                                    <input name="fax" ng-model="obj.object.fax" aria-label="单位传真" md-maxlength="30" >
+                                </md-input-container>
+                            </div>
+                            <div layout layout-sm="column">
+                                <md-input-container flex md-no-float>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        单位邮箱<font style="color: red;margin-left: 4px;"></font></p>
+                                    <input name="email" ng-model="obj.object.email" aria-label="单位邮箱" md-maxlength="50" ng-pattern="/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/">
+                                    <div ng-messages="unitInfoForm.email.$error"
+                                         ng-show="unitInfoForm.email.$dirty || unitInfoForm.email.$touched">
+                                        <div ng-message="pattern">请输入合法格式的邮箱地址！</div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container flex md-no-float>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        单位邮编<font style="color: red;margin-left: 4px;"></font></p>
+                                    <input name="post_code" ng-model="obj.object.post_code" aria-label="单位邮编" md-maxlength="6" ng-pattern="/^\d{6}$/">
+                                    <div ng-messages="unitInfoForm.post_code.$error"
+                                         ng-show="unitInfoForm.post_code.$dirty || unitInfoForm.post_code.$touched">
+                                        <div ng-message="pattern">请输入数字类型的邮编！</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                        </form>
+                    </md-content>
+                </div>
+            </form>
+            <md-button ng-click="close()" class="md-raised" style="float: right;">
+                关闭
+            </md-button>
+            <md-button ng-click="save()" class="md-raised" style="float: right;">
+                保存
+            </md-button>
+        </md-sidenav>
+    </section>
+</div>

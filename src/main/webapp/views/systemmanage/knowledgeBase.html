@@ -1,0 +1,105 @@
+<!-- Nested node template -->
+<script type="text/ng-template" id="nodes_renderer.html">
+    <md-menu md-position-mode="target-right target">
+        <md-button aria-label="Open demo menu" class="tree-node tree-node-content" style="width: 360px;margin: 6px 0px;"   ng-mousedown="openMenu($mdOpenMenu, $event,this,node)">
+            <div ui-tree-handle class="tree-node tree-node-content menu-demo-container"  layout="row" layout-align="start center">
+                <a class="btn btn-success btn-xs" ng-if="node.nodes && node.nodes.length > 0" data-nodrag>
+                    <span class="glyphicon"  ng-class="{'glyphicon-chevron-right': collapsed,'glyphicon-chevron-down': !collapsed}"></span>
+                </a>
+                <span ng-bind-html="node.title | highlight:pattern  | trust"></span>
+                <span flex></span>
+            </div>
+        </md-button>
+        <md-menu-content width="4">
+            <md-menu-item ng-if="node.id !=1 && node.id != 2">
+                <md-button ng-click="allot(this,node,true,true)">
+                    <md-icon  md-menu-align-target></md-icon>
+                    新增同级知识点
+                </md-button>
+            </md-menu-item>
+            <md-menu-item>
+                <md-button ng-click="allot(this,node,true,false)">
+                    <md-icon  md-menu-align-target></md-icon>
+                    新增子集知识点
+                </md-button>
+            </md-menu-item>
+            <md-menu-item ng-if="node.id !=1 && node.id != 2">
+                <md-button ng-click="allot(this,node,false,null)">
+                    <md-icon  md-menu-align-target></md-icon>
+                    编辑知识点
+                </md-button>
+            </md-menu-item>
+            <md-menu-divider ng-if="node.id !=1 && node.id != 2"></md-menu-divider>
+            <md-menu-item ng-if="node.id !=1 && node.id != 2">
+                <md-button ng-click="rm(node)">
+                    <md-icon  md-menu-align-target></md-icon>
+                    删除知识点
+                </md-button>
+            </md-menu-item>
+        </md-menu-content>
+    </md-menu>
+    <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}">
+        <li ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'"
+            ng-hide="!treeFilter(node, pattern, ['title']) && !dim"
+            ng-class="{'filtered-out':!treeFilter(node, pattern, ['title']) && dim}">
+        </li>
+    </ol>
+</script>
+
+<jr-navigation first="系统管理" second="知识库"></jr-navigation>
+<div layout="column" style="background: #E5E9EC;" ng-init="dim=false;">
+    <md-content flex style="background: #E5E9EC;">
+        <md-card style="margin-top: 2px;">
+            <md-card-content>
+                <div layout="row">
+                    <div flex layout="column" style="border-right: 1px solid #267ED5;width: 440px;">
+                        <md-toolbar class="md-theme-light">
+                            <div class="md-toolbar-tools" layout-align="left start">
+                                <h2 class="md-flex">知识库</h2>
+                                <span flex></span>
+                                查询：
+                                <md-input-container flex style="padding-bottom: 1px;color: white;">
+                                    <input type="search"  ng-model="pattern" style="color: white;border-bottom-color: white">
+                                </md-input-container>
+                            </div>
+                        </md-toolbar>
+                        <md-content layout-padding style="height: 600px;padding: 0px;">
+                            <div ui-tree id="tree-root" data-drag-enabled="false">
+                                <ol ui-tree-nodes ng-model="data">
+                                    <li  ng-repeat="node in data" ui-tree-node ng-include="'nodes_renderer.html'"
+                                         ng-hide="!treeFilter(node, pattern,  ['title']) && !dim"
+                                         ng-class="{'filtered-out':!treeFilter(node, pattern,  ['title']) && dim}">
+                                    </li>
+                                </ol>
+                            </div>
+                        </md-content>
+                    </div>
+                    <div flex="66" hide-sm layout="column">
+                        <md-toolbar class="md-theme-light">
+                            <div class="md-toolbar-tools" layout-align="center start">
+                                <h2 class="md-flex">详细内容</h2>
+                            </div>
+                        </md-toolbar>
+                        <md-content layout-padding style="height: 600px;padding-top: 40px;">
+                            <md-content layout-padding style="padding-bottom: 10px;" ng-if="desc.real_name !=null">
+                                附件:
+                                <a href="{{localAddress}}/upload/{{desc.file_name}}">
+                                    {{desc.real_name}}
+                                </a>
+                            </md-content>
+                            <md-content layout-padding style="height: 600px;padding-top: 40px;">
+                                <md-content layout-padding style="padding-bottom: 10px;">
+                                    <md-tooltip md-autohide md-direction="top">
+                                        创建用户：{{desc.create_user}}
+                                        创建时间：{{desc.create_date}}
+                                    </md-tooltip>
+                                    {{desc.know_content}}
+                                </md-content>
+                            </md-content>
+                        </md-content>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+    </md-content>
+</div>

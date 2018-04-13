@@ -1,0 +1,111 @@
+<jr-navigation first="系统管理" second="数据类型管理"></jr-navigation>
+<style>
+    .headerCss{
+        text-align: center;
+    }
+    .cellCss{
+        text-align: center;
+    }
+</style>
+<div layout="column" style="background: #E5E9EC;" ng-controller="dataTabCTRL as ctrl">
+    <!-- 上方查询框-->
+    <md-content flex style="background: #E5E9EC;">
+        <md-card style="margin-top: 2px;">
+            <md-card-content>
+                <form name="SearchForm">
+                    <div layout layout-sm="column" class="no-bottom">
+                        <md-input-container flex style="padding-bottom: 1px;">
+                            <label>数据类型名称</label>
+                            <!-- 绑定type_name即可 like是模糊查询-->
+                            <input ng-model="obj.searchObj.LIKE$tab_name">
+                        </md-input-container>
+                        <md-input-container flex style="padding-bottom: 1px;">
+                        </md-input-container>
+                        <md-input-container flex style="padding-bottom: 1px;"></md-input-container>
+                    </div>
+                </form>
+            </md-card-content>
+            <div class="md-actions" layout="row" layout-align="end center">
+                <!-- 添加按钮 点击跳转 toggleRight（）方法 -->
+                <md-button ng-click="toggleRight()" ng-if="checkAuth('添加权限','BUTTON')" class="md-raised" layout layout-align="center end">添加</md-button>
+                <!-- 查询按钮 点击访问 search（）方法-->
+                <md-button ng-click="search()" class="md-raised" layout layout-align="center end">查询</md-button>
+            </div>
+        </md-card>
+    </md-content>
+    <!--添加界面/修改页面-->
+    <section layout="row" flex>
+        <md-content flex style="background: #E5E9EC;">
+            <md-card style="margin-top: 2px;">
+                <md-card-content>
+                    <div ui-grid="gridOptions" ui-grid-pagination ui-grid-pinning
+                         ui-grid-resize-columns ui-grid-auto-resize></div>
+                </md-card-content>
+            </md-card>
+        </md-content>
+        <md-sidenav class="md-sidenav-right md-whiteframe-z2" style="min-width:800px;" md-component-id="right">
+            <form name="userform">
+                <div layout="column">
+                    <md-content md-theme="docs-dark" layout-padding layout="row" layout-sm="column">
+                        <h2 class="md-toolbar-tools" style="text-align: center;overflow:hidden;color: white;">
+                            <span>编辑数据类型信息</span>
+                        </h2>
+                    </md-content>
+                    <md-content layout-padding>
+                        <form>
+                            <input type="hidden" ng-model="obj.object.id">
+                            <div layout layout-sm="column">
+                                <md-input-container flex>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        数据类型名称:<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <input name="tab_name" type="text" ng-model="obj.object.tab_name" required  md-maxlength="50">
+                                    <div ng-messages="userform.tab_name.$error"
+                                         ng-show="userform.tab_name.$dirty || userform.tab_name.$touched">
+                                        <div ng-message="required">请输入数据类型名称！</div>
+                                        <div ng-message="md-maxlength">数据类型名称不能超过50个字节！</div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container flex>
+                                </md-input-container>
+                            </div>
+                            <md-card style="margin-top: 2px;">
+                                <md-card-content>
+                                    <form name="SearchSubForm" >
+                                        <div layout layout-sm="column">
+                                            <md-input-container flex style="padding-bottom: 1px;">
+                                                <label>数据名称</label>
+                                                <input ng-model="obj.searchObj1.LIKE$col_name">
+                                            </md-input-container>
+                                            <md-input-container flex style="padding-bottom: 1px;"></md-input-container>
+                                        </div>
+                                    </form>
+                                </md-card-content>
+                                <div class="md-actions" layout="row" layout-align="end center">
+                                    <md-button ng-click="subSearch()" class="md-raised" layout layout-align="center end">查询</md-button>
+                                </div>
+                            </md-card>
+                            <md-content flex style="background: #E5E9EC;">
+                                <md-card style="margin-top: 2px;">
+                                    <md-card-content>
+                                        <div ui-grid="gridOptions2" ui-grid-pagination ui-grid-selection ui-grid-pinning ui-grid-resize-columns
+                                             ui-grid-auto-resize
+                                             class="grid"></div>
+                                    </md-card-content>
+                                </md-card>
+                            </md-content>
+                        </form>
+                    </md-content>
+                </div>
+            </form>
+            <!-- 关闭按钮 访问关闭方法-->
+            <md-button ng-click="close()" class="md-raised" style="float: right;">
+                关闭
+            </md-button>
+            <!-- 保存按钮 访问保存方法-->
+            <md-button ng-click="save()" class="md-raised" style="float: right;">
+                保存
+            </md-button>
+        </md-sidenav>
+    </section>
+</div>

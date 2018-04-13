@@ -1,0 +1,8 @@
+<md-input-container>
+    <label>{{labelName}}</label>
+    <md-select ng-model="jrModel">
+        <md-option ng-value="">--请选择--</md-option>
+        <md-option ng-repeat="data in jrDatas" ng-value="data[showValue]">{{data[showText]}}
+        </md-option>
+    </md-select>
+</md-input-container>

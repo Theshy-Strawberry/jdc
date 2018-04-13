@@ -1,0 +1,163 @@
+<jr-navigation first="系统管理" second="佣金类型管理"></jr-navigation>
+<style>
+    .headerCss{
+        text-align: center;
+    }
+    .cellCss{
+        text-align: center;
+    }
+</style>
+<div layout="column" style="background: #E5E9EC;" ng-controller="brokerageTypeCTRL as ctrl">
+    <!-- 上方查询框-->
+    <md-content flex style="background: #E5E9EC;">
+        <md-card style="margin-top: 2px;">
+            <md-card-content>
+                <form name="SearchForm">
+                    <div layout layout-sm="column" class="no-bottom">
+                        <md-input-container flex style="padding-bottom: 1px;">
+                            <label>佣金类型名称：</label>
+                            <!-- 绑定type_name即可 like是模糊查询-->
+                            <input ng-model="obj.searchObj.LIKE$type_name">
+                        </md-input-container>
+                        <!-- select下拉列表 适用于上方查询框 jr-datas指定selectData.(routes.js 最下面自己配置的内容) EQ是精准查询 -->
+                        <jr-select label-name="计算方式" jr-datas="selectData.typeOfBrokerageType" jr-model="obj.searchObj.EQ$calculate_type"
+                                   show-value="id" show-text="text" flex style="padding-bottom: 1px;">
+                        </jr-select>
+                        <div layout layout-sm="column" class="no-bottom">
+                            <div flex class="no-bottom" style="padding-bottom: 1px;">
+                                <div flex layout layout-sm="column">
+                                    <md-input-container flex style="padding:2px 2px 0px 2px;">
+                                        <label>创建开始时间：</label>
+                                        <input type="date" name="create_date"
+                                               ng-model="obj.searchObj.START$create_date" aria-label="创建开始时间" >
+                                    </md-input-container>
+                                    <p style="margin: 0.2em 1em;"><label style="margin-top: 21px;">~</label></p>
+                                    <md-input-container flex style="padding:2px 2px 0px 2px;">
+                                        <label>创建结束时间：</label>
+                                        <input type="date" name="create_date"
+                                               ng-model="obj.searchObj.END$create_date" aria-label="结束时间" >
+                                    </md-input-container>
+                                </div>
+                                <!-- 开始时间必须早于结束时间的验证 写在html div模块里 -->
+                                <div ng-messages="SearchForm.create_date.$error" class="ng-active" flex>
+                                    <div ng-if="obj.searchObj.END$create_date != null && (obj.searchObj.END$create_date-obj.searchObj.START$create_date<0)" class="ng-scope"
+                                         style="color: rgb(244,67,54);font-size: 12px;">
+                                        结束日期只可选择晚于开始日期的时间！
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <md-input-container flex style="padding-bottom: 1px;"></md-input-container>
+                    </div>
+                </form>
+            </md-card-content>
+            <div class="md-actions" layout="row" layout-align="end center">
+                <!-- 添加按钮 点击跳转 toggleRight（）方法 -->
+                <md-button ng-click="toggleRight()" class="md-raised" layout layout-align="center end">添加</md-button>
+                <!-- 查询按钮 点击访问 search（）方法-->
+                <md-button ng-click="search()" class="md-raised" layout layout-align="center end">查询</md-button>
+            </div>
+        </md-card>
+    </md-content>
+    <!--添加界面/修改页面-->
+    <section layout="row" flex>
+        <md-content flex style="background: #E5E9EC;">
+            <md-card style="margin-top: 2px;">
+                <md-card-content>
+                    <div ui-grid="gridOptions" ui-grid-pagination ui-grid-pinning
+                         ui-grid-resize-columns ui-grid-auto-resize></div>
+                </md-card-content>
+            </md-card>
+        </md-content>
+        <md-sidenav class="md-sidenav-right md-whiteframe-z2" style="min-width:800px;" md-component-id="right">
+        <form name="user_form">
+            <div layout="column">
+                <md-content md-theme="docs-dark" layout-padding layout="row" layout-sm="column">
+                    <h2 class="md-toolbar-tools" style="text-align: center;overflow:hidden;color: white;">
+                        <span>编辑佣金类型</span>
+                    </h2>
+                </md-content>
+                <md-content layout-padding>
+                    <form>
+                        <input type="hidden" ng-model="obj.object.id">
+                        <div layout layout-sm="column">
+                            <md-input-container flex>
+                                <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                   class="md-caption md-primary">
+                                    佣金类型名称:<font style="color: red;margin-left: 4px;">*</font></p>
+                                <!-- 佣金名称验证-->
+                                <input name="type_name" type="text" ng-model="obj.object.type_name"
+                                       ng-maxlength="50" ng-pattern="/^[\u4e00-\u9fa5a-zA-Z0-9]+$/" md-maxlength="50" required>
+                                <div ng-messages="user_form.type_name.$error"
+                                     ng-show="user_form.type_name.$dirty || user_form.type_name.$touched">
+                                    <div ng-message="required">请输入佣金类型名称！！</div>
+                                    <div ng-message="maxlength">佣金类型名称不能超过50个字节！</div>
+                                    <div ng-message="pattern">佣金类型名称只能输入中英文字符或者数字！</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container flex>
+                                <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                   class="md-caption md-primary">
+                                    计算方式:<font style="color: red;margin-left: 4px;">*</font></p>
+                                <!-- 右面弹出界面用的下拉列表-->
+                                <md-select name="calculate_type" placeholder="---&nbsp;请选择&nbsp;---" aria-label="计算方式"
+                                           ng-model="obj.object.calculate_type" required>
+                                    <md-option ng-value="">---&nbsp;请选择&nbsp;---</md-option>
+                                    <md-option ng-repeat="data in selectData.typeOfBrokerageType" ng-value="data.id">{{
+                                        data.text}}
+                                    </md-option>
+                                </md-select>
+                                <!-- 下拉列表验证-->
+                                <div ng-messages="user_form.calculate_type.$error"
+                                     ng-show="user_form.calculate_type.$dirty || user_form.calculate_type.$touched">
+                                    <div ng-message="required">请选择计算方式！！</div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                        <!-- 添加界面可以见 opFlg==1 不可改动-->
+                        <div layout layout-sm="column" ng-if="opFlg==1">
+                            <md-input-container flex md-no-float>
+                                <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                   class="md-caption md-primary">
+                                    创建人:<font style="color: red;margin-left: 4px;"></font></p>
+                                <input name="create_user" type="text" ng-model="obj.object.create_user" disabled="disabled">
+                            </md-input-container>
+                            <md-input-container flex md-no-float>
+                                <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                   class="md-caption md-primary">
+                                    创建时间:<font style="color: red;margin-left: 4px;"></font></p>
+                                <!-- 创建时间 日期格式化-->
+                                <input name="create_date" type="text"  ng-model="obj.object.create_date" disabled="disabled">
+                            </md-input-container>
+                        </div>
+                        <!-- 添加界面可以见 opFlg==2 不可改动 -->
+                        <div layout layout-sm="column" ng-show="obj.object.id"  ng-if="opFlg==2">
+                            <md-input-container flex md-no-float>
+                                <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                   class="md-caption md-primary">
+                                    修改人:<font style="color: red;margin-left: 4px;"></font></p>
+                                <input name="modify_user" type="text" ng-model="obj.object.modify_user" disabled="disabled">
+                            </md-input-container>
+                            <md-input-container flex md-no-float>
+                                <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                   class="md-caption md-primary">
+                                    修改时间:<font style="color: red;margin-left: 4px;"></font></p>
+                                <!-- 修改时间 日期格式化-->
+                                <input name="modify_date" type="text"  ng-model="obj.object.modify_date" disabled="disabled">
+                            </md-input-container>
+                        </div>
+                    </form>
+                </md-content>
+            </div>
+        </form>
+            <!-- 关闭按钮 访问关闭方法-->
+        <md-button ng-click="close()" class="md-raised" style="float: right;">
+            关闭
+        </md-button>
+            <!-- 保存按钮 访问保存方法-->
+        <md-button ng-click="save()" class="md-raised" style="float: right;">
+            保存
+        </md-button>
+    </md-sidenav>
+    </section>
+</div>

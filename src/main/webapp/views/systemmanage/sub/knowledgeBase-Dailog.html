@@ -1,0 +1,60 @@
+<md-dialog aria-label="List dialog" style="width: 400px;">
+    <md-dialog-content>
+        <form name="subForm">
+            <input type="hidden" ng-model="point.id">
+            <input type="hidden" ng-model="point.parent_id">
+            <md-input-container flex style="padding-bottom: 1px;">
+                <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                   class="md-caption md-primary">知识点来源</p>
+                <md-radio-group ng-model="point.know_source" layout="row">
+                    <md-radio-button value="1" class="md-primary" ng-disabled="type">总公司</md-radio-button>
+                    <md-radio-button value="2" ng-disabled="type"> 审计部</md-radio-button>
+                </md-radio-group>
+            </md-input-container>
+            <md-input-container flex style="padding-bottom: 1px;">
+                <label>知识点名称<font style="color: red;margin-left: 4px;">*</font></label>
+                <input name="know_name" ng-model="point.know_name" md-maxlength="50" required>
+                <div ng-messages="subForm.know_name.$error"
+                     ng-show="subForm.know_name.$dirty || subForm.know_name.$touched">
+                    <div ng-message="required">请输入知识点名称！</div>
+                </div>
+            </md-input-container>
+            <md-input-container flex>
+                <label>详细内容<font style="color: red;margin-left: 4px;">*</font></label>
+            <textarea name="know_content" ng-model="point.know_content" type="textarea"
+                      style="height: 155px;"
+                      columns="6" md-maxlength="1000" required></textarea>
+                <div ng-messages="subForm.know_content.$error"
+                     ng-show="subForm.know_content.$dirty || subForm.know_content.$touched">
+                    <div ng-message="required">请输入详细内容！</div>
+                </div>
+            </md-input-container>
+            <div>
+                <md-input-container flex>
+                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                       class="md-caption md-primary">上传附件：<font style="color: red;margin-left: 4px;">*</font></p>
+                    <input type="file" file-upload multiple ng-model="point.attr_path" name="attr_path" id="file"/>
+                </md-input-container>
+            </div>
+            <div ng-if="point.real_name != null">
+                <md-input-container flex>
+                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                       class="md-caption md-primary">已上传附件：<font style="color: red;margin-left: 4px;">*</font></p>
+                    <a href="{{localAddress}}/upload/{{point.file_name}}">
+                        {{point.real_name}}
+                    </a>
+                </md-input-container>
+            </div>
+            <label>创建用户：{{point.create_user}}</label><br/>
+            <label>创建时间：{{point.create_date | date:"yyyy-MM-dd"}}</label>
+        </form>
+    </md-dialog-content>
+    <div class="md-actions">
+        <md-button class="md-primary" ng-click="saveDialog(type)">
+            保存
+        </md-button>
+        <md-button class="md-primary" ng-click="closeDialog()">
+            关闭
+        </md-button>
+    </div>
+</md-dialog>

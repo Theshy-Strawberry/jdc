@@ -1,0 +1,104 @@
+<!doctype html>
+<html class="no-js" ng-controller="IndexCtrl" id="ng-app" lang="zh-CN"  xmlns:ng="http://angularjs.org">
+<head>
+    <!–[if lt IE 8]>
+    <script>
+        document.createElement('ng-include');
+        document.createElement('ng-pluralize');
+        document.createElement('ng-view');
+        // Optionally these for CSS
+        document.createElement('ng:include');
+        document.createElement('ng:pluralize');
+        document.createElement('ng:view');
+    </script>
+    <![endif]-->
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no,width=device-width" />
+    <!--<meta http-equiv="X-UA-Compatible" content="IE=9" />-->
+    <meta charset="utf-8">
+    <title>津地产信息管理系统</title>
+    <meta name="description" content="">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="./lib/bootstrap/bootstrap.css"/>
+    <link rel="stylesheet" href="./lib/angular-material/1.1/angular-material.css"/>
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="./styles/layout.css">
+    <!-- endbuild -->
+</head>
+<body layout="row" ng-cloak style="font-family: Arial, Helvetica, sans-serif">
+<!-- =========================================================================================== -->
+
+<md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z2" ng-hide="hideMenu"
+            md-component-id="left"
+            md-is-locked-open="$mdMedia('gt-sm')">
+
+    <md-toolbar class="md-whiteframe-glow-z2"
+                style="max-height: 180px;min-height: 180px;background: transparent;">
+        <div class="image-avatar ">
+            <img src="images/logo2.png"/>
+            <span><i class="fa fa-circle text-success"></i>
+            </span>
+        </div>
+        <div class="info">
+            <p class="text-center">
+                <span>
+                    <strong style="color: white;font-size: 17px;">{{sysUsersInfo.real_name}}</strong>
+                </span>
+            </p>
+            <ul class="profile-list">
+                <li>
+                    <md-button class="md-fab md-mini" aria-label="123" ng-click="toPath(1)"
+                               style="height: 30px;min-height: 30px;width: 30px;line-height: 0px;background: #0D131E;margin: 0px;">
+                        <md-icon md-svg-src="images/icons/iconfont-guanliyuan.svg"
+                                 style="color: white;width: 18px;height: 18px;"></md-icon>
+                        <md-tooltip md-autohide>个人设置</md-tooltip>
+                    </md-button>
+                </li>
+                <li>
+                    <md-button class="md-fab md-mini" aria-label="Comment" ng-click="toPath(2)"
+                               style="height: 30px;min-height: 30px;width: 30px;line-height: 0px;background: #0D131E;margin: 0px;">
+                        <md-icon md-svg-src="images/icons/iconfont-shezhi.svg"
+                                 style="color: white;width: 18px;height: 18px;"></md-icon>
+                        <md-tooltip md-autohide>修改密码</md-tooltip>
+                    </md-button>
+                </li>
+                <!--<li>-->
+                    <!--<md-button class="md-fab md-mini" aria-label="Comment" ng-click="toPath(3)"-->
+                               <!--style="height: 30px;min-height: 30px;width: 30px;line-height: 0px;background: #0D131E;margin: 0px;">-->
+                        <!--<md-icon md-svg-src="images/icons/iconfont-yingyongzhongxin.svg"-->
+                                 <!--style="color: white;width: 18px;height: 18px;"></md-icon>-->
+                        <!--<md-tooltip md-autohide>快捷导航</md-tooltip>-->
+                    <!--</md-button>-->
+                <!--</li>-->
+            </ul>
+        </div>
+    </md-toolbar>
+
+    <ul class="skip-links">
+        <li class="md-whiteframe-z2">
+            <md-button ng-click="focusMainContent($event)" href="#">跳过</md-button>
+        </li>
+    </ul>
+
+    <md-content flex role="navigation" ng-include src="'views/menu.html'" >
+    </md-content>
+</md-sidenav>
+
+<div layout="column" tabIndex="-1" role="main" flex ng-include src="'views/content.html'" style="background: #E5E9EC;">
+</div>
+<!-- =========================================================================================== -->
+
+<!-- build:js(.) scripts/vendor.js -->
+<!-- bower:js -->
+<script src="lib/requirejs/require.js" defer async="true" data-main="scripts/config.js"></script>
+<!-- endbower -->
+
+<!-- endbuild -->
+<!-- build:js({.tmp,app}) scripts/scripts.js -->
+<!-- endbuild -->
+</body>
+</html>

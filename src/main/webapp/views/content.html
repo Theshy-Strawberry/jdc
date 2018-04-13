@@ -1,0 +1,44 @@
+<md-toolbar class="md-whiteframe-z2" style="background: #ffffff;color: #0090D9 !important;">
+    <div class="md-toolbar-tools docs-toolbar-tools" ng-click="openMenu()" tabIndex="-1" style="padding-left: 8px;">
+        <div layout="row" flex class="fill-height" style="min-width: 800px; margin-left: 8px;">
+            <md-button class="md-icon-button" aria-label="Toggle Menu" ng-click="editMenu();">
+                <md-icon md-svg-src="images/icons/head-liebiao.svg"></md-icon>
+                <md-tooltip md-autohide>开启/关闭菜单</md-tooltip>
+            </md-button>
+            <h2 class="md-toolbar-item md-breadcrumb">
+                <span class="md-breadcrumb-page">津地产信息管理系统</span>
+            </h2>
+            <!--<md-input-container md-no-float style="margin-top: 25px;margin-left: 10px;">-->
+                <!--<input placeholder="搜索功能..." ng-model="searchVal">-->
+                <!--<md-tooltip md-autohide>搜索需要使用的系统功能</md-tooltip>-->
+            <!--</md-input-container>-->
+            <span flex></span>
+            <!-- use up the empty space -->
+            <div class="md-toolbar-item docs-tools" layout="column" layout-gt-md="row">
+                <!--<md-button class="md-icon-button"-->
+                           <!--style="border: 2px solid #0AA699;height: 40px;min-height: 40px;width: 40px;"-->
+                           <!--aria-label="Install with Bower">-->
+                    <!--<md-tooltip md-autohide>我的待办</md-tooltip>-->
+                    <!--<md-icon md-svg-src="images/icons/ic_email_24px.svg"-->
+                             <!--style="color: #0AA699;vertical-align:text-bottom;"></md-icon>-->
+                <!--</md-button>-->
+                <!--<md-button class="md-icon-button"-->
+                           <!--style="border: 2px solid #0190D9;height: 40px;min-height: 40px;width: 40px;"-->
+                           <!--aria-label="Install with Bower">-->
+                    <!--<md-tooltip md-autohide>我的消息</md-tooltip>-->
+                    <!--<md-icon md-svg-src="images/icons/ic_comment_24px.svg"-->
+                             <!--style="color: #0190D9;vertical-align:text-bottom;"></md-icon>-->
+                <!--</md-button>-->
+                <md-button class="md-icon-button"
+                           style="border: 2px solid #F56954;height: 40px;min-height: 40px;width: 40px;"
+                           aria-label="Install with Bower" ng-click="logout()">
+                    <md-tooltip md-autohide>退出登录</md-tooltip>
+                    <md-icon md-svg-src="images/icons/iconfont-tuichu.svg"
+                             style="color: #F56954;vertical-align:text-bottom;margin-left: 5px;margin-bottom: 2px;"></md-icon>
+                </md-button>
+            </div>
+        </div>
+    </div>
+</md-toolbar>
+
+<md-content ng-view md-scroll-y flex layout-padding style="background: #E5E9EC;"></md-content>

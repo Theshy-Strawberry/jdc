@@ -1,0 +1,33 @@
+#正式配置
+conf.devMode = false
+
+db.configs = main
+
+#main
+#main.db.type = oracle
+#main.db.jdbcUrl = jdbc:oracle:thin:@192.168.1.2:1521:ORCL
+#main.db.user = auditsys
+#main.db.password = auditsys
+#main.db.driverClass = oracle.jdbc.driver.OracleDriver
+#main.db.type = oracle
+#main.db.jdbcUrl = jdbc:oracle:thin:@miaorf.vicp.cc:27879:ORCL
+#main.db.user = auditsys
+#main.db.password = auditsys
+#main.db.driverClass = oracle.jdbc.driver.OracleDriver
+
+#main.db.type = oracle
+#main.db.jdbcUrl = jdbc:oracle:thin:@jrrexliang.com:49161:xe
+#main.db.user = jdc
+#main.db.password = jdc
+#main.db.driverClass = oracle.jdbc.driver.OracleDriver
+
+main.db.type = mysql
+main.db.jdbcUrl = jdbc:mysql://localhost:3306/jdc?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+main.db.user = root
+main.db.password =pwd
+main.db.driverClass = com.mysql.jdbc.Driver
+
+#参数
+db.initialSize = 10
+db.minIdle = 10
+db.maxActive = 100

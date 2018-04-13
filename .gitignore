@@ -1,0 +1,11 @@
+.DS_Store
+src/.DS_Store
+src/main/.DS_Store
+src/main/webapp/.DS_Store
+src/main/webapp/WEB-INF/.DS_Store
+src/main/resources/db_config_pro.txt
+
+basecode.iml
+BaseCode.iml
+.idea
+target

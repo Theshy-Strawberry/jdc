@@ -1,0 +1,410 @@
+<jr-navigation first="系统管理" second="用车申请"></jr-navigation>
+<div layout="column" style="background: #E5E9EC;">
+    <form flex class="navbar-form navbar-right" role="search" style="width: 98.5%;margin-left: 8px;padding: 0;">
+        <button type="submit" class="btn btn-default" style="float: left;" ng-click="toggleRight()">添加</button>
+        <!--<div class="input-group" style="float: right;">
+          <input type="text" class="form-control" placeholder="Search for...">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">搜索</button>
+                  </span>
+        </div>-->
+    </form>
+    <section layout="row" flex>
+
+        <!--<md-content flex style="background: #E5E9EC;">-->
+        <!--<md-card>-->
+        <!--<md-card-content loading-container="tableParams.settings().$loading">-->
+        <!--<table ng-table="tableParams" class="table ng-table-responsive  table-hover">-->
+        <!--<tbody ng-repeat="carapply in $data">-->
+        <!--<tr ng-click="showThis(carapply.ID,tableType.data)">-->
+        <!--<td data-title="' 序号'">-->
+        <!--{{carapply.id}}-->
+        <!--</td>-->
+        <!--<td data-title="'申请人'">-->
+        <!--{{carapply.APPLY_USER}}-->
+        <!--</td>-->
+        <!--<td data-title="'申请时间'">-->
+        <!--{{carapply.APPLY_DATE}}-->
+        <!--</td>-->
+        <!--<td data-title="'用车时间'">-->
+        <!--{{carapply.USE_TIME}}-->
+        <!--</td>-->
+        <!--<td data-title="'出发地点'">-->
+        <!--{{carapply.START_PLACE}}-->
+        <!--</td>-->
+        <!--<td data-title="'目的地'">-->
+        <!--{{carapply.END_PLACE}}-->
+        <!--</td>-->
+        <!--<td data-title="'用车理由'">-->
+        <!--{{carapply.USE_REASON}}-->
+        <!--</td>-->
+        <!--<td data-title="'同行人员'">-->
+        <!--{{carapply.TOGGLE_PERSONS}}-->
+        <!--</td>-->
+        <!--<td data-title="'申请状态'">-->
+        <!--{{carapply.IS_AGREE}}-->
+        <!--</td>-->
+        <!--&lt;!&ndash;<td data-title="'申请回复'">&ndash;&gt;-->
+        <!--&lt;!&ndash;{{carapply.age}}&ndash;&gt;-->
+        <!--&lt;!&ndash;</td>&ndash;&gt;-->
+        <!--<td data-title="'操作'">-->
+        <!--<md-button ng-click="showConfirm(e,carapply)" class="md-raised" style="float: right;">-->
+        <!--删除-->
+        <!--</md-button>-->
+        <!--<md-button ng-click="update(carapply)" class="md-raised" style="float: right;">-->
+        <!--修改-->
+        <!--</md-button>-->
+        <!--</td>-->
+        <!--</tr>-->
+        <!--</tbody>-->
+        <!--</table>-->
+        <!--</md-card-content>-->
+        <!--</md-card>-->
+        <!--</md-content>-->
+
+        <md-content flex style="background: #E5E9EC;">
+            <md-card style="margin-top: 2px;">
+                <md-card-content>
+                    <div ui-grid="gridOptions" ui-grid-pagination ui-grid-pinning
+                         ui-grid-resize-columns ui-grid-auto-resize style="height: 450px"></div>
+                </md-card-content>
+            </md-card>
+        </md-content>
+
+        <md-sidenav class="md-sidenav-right md-whiteframe-z2" style="min-width:800px;" md-component-id="right">
+            <form name="carapplyform">
+                <div layout="column">
+                    <md-content md-theme="docs-dark" layout-padding layout="row" layout-sm="column">
+                        <h2 class="md-toolbar-tools" style="text-align: center;overflow:hidden;color: white;">
+                            <span>编辑用车申请信息</span>
+                        </h2>
+                    </md-content>
+                    <md-content layout-padding>
+                        <form name="userForm">
+                            <input type="hidden" ng-model="carapply.id">
+
+                            <div layout layout-sm="column">
+                                <md-input-container flex>
+                                    <label>申请人</label>
+                                    <input ng-model="carapply.apply_user" disabled>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label>科室</label>
+                                    <input ng-model="carapply.office_name" disabled>
+                                </md-input-container>
+                            </div>
+                            <div layout layout-sm="column">
+                                <md-input-container flex  style="margin-top:0px;">
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        项目名称:<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <md-autocomplete flex style="padding-bottom:0px;"
+                                                     md-no-cache="true"
+                                                     md-selected-item="saveItem"
+                                                     md-search-text="saveText"
+                                                     md-items="item in saveSearch(saveText)"
+                                                     md-item-text="item.project_name"
+                                                     md-floating-label>
+                                        <span md-highlight-text="searchText" style="box-shadow: none;">{{item.project_name}}</span>
+                                        <!--<div ng-messages="carapplyform.project_id.$error"
+                                             ng-show="carapplyform.project_id.$dirty || carapplyform.project_id.$touched">
+                                            <div ng-message="required">请输入项目名称！</div>
+                                            <div ng-if="projectFlag == 1" class="ng-scope" style="color: rgb(244,67,54);font-size: 12px;">项目名称不存在！</div>
+                                        </div>-->
+                                    </md-autocomplete>
+                                    <!--<p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        项目名称<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <input name="project_id" ng-model="carapply.project_id" required>
+
+                                    <div ng-messages="carapplyform.project_id.$error"
+                                         ng-show="carapplyform.project_id.$dirty || carapplyform.project_id.$touched">
+                                        <div ng-message="required">请输入项目名称！</div>
+                                    </div>-->
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        用车区间<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <md-select name="apply_type" placeholder="---&nbsp;请选择&nbsp;---"
+                                               ng-model="carapply.apply_type" required>
+                                        <md-option ng-value="">---&nbsp;请选择&nbsp;---</md-option>
+                                        <md-option value="1">市内</md-option>
+                                        <md-option value="2">市外</md-option>
+                                    </md-select>
+                                    <div ng-messages="carapplyform.apply_type.$error"
+                                         ng-show="carapplyform.apply_type.$dirty || carapplyform.apply_type.$touched">
+                                        <div ng-message="required">请选择用车区间！</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                            <div layout layout-sm="column">
+                                <div flex class="no-bottom" style="padding-bottom: 1px;">
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        出发日期<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <div flex layout layout-sm="column">
+                                        <md-input-container flex>
+                                            <input type="date" name="use_date"
+                                                   ng-model="carapply.use_date" aria-label="请选择日期" required ng-change="checkDate()">
+                                            <div ng-messages="carapplyform.use_date.$error"
+                                                 ng-show="carapplyform.use_date.$dirty || carapplyform.use_date.$touched">
+                                                <div ng-message="required">请输入出发日期！</div>
+                                                <div ng-if="dateFlag == 1" class="ng-scope"
+                                                     style="color: rgb(244,67,54);font-size: 12px;">
+                                                    出发日期不能小于当前日期</div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                </div>
+                                <md-input-container flex>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        出发时间<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <!--<input name="use_time" ng-model="carapply.use_time" required-->
+                                           <!--ng-pattern="/([01]?\d|2[0-3]):[0-5]?\d/">-->
+                                    <input name="use_time" ng-model="carapply.use_time" required
+                                           ng-pattern=" /^(([0]{1}[0-9]{1})|([1]{1}[0-9]{1})|([2]{1}[0-3]{1})):([0-5][0-9])$/">
+
+                                    <div ng-messages="carapplyform.use_time.$error"
+                                         ng-show="carapplyform.use_time.$dirty || carapplyform.use_time.$touched">
+                                        <div ng-message="required">请输入出发时间！</div>
+                                        <div ng-message="pattern">请输入hh:mm格式时间！</div>
+                                    </div>
+                                    <!--出发时间:
+                                    <md-select placeholder="请选择" ng-model="carapply.departure_time">
+                                      <md-option value="1:00">1:00</md-option>
+                                      <md-option value="2:00">2:00</md-option>
+                                      <md-option value="3:00">3:00</md-option>
+                                      <md-option value="4:00">4:00</md-option>
+                                      <md-option value="5:00">5:00</md-option>
+                                      <md-option value="6:00">6:00</md-option>
+                                      <md-option value="7:00">7:00</md-option>
+                                      <md-option value="8:00">8:00</md-option>
+                                      <md-option value="9:00">9:00</md-option>
+                                      <md-option value="10:00">10:00</md-option>
+                                      <md-option value="11:00">11:00</md-option>
+                                      <md-option value="12:00">12:00</md-option>
+                                      <md-option value="13:00">13:00</md-option>
+                                      <md-option value="14:00">14:00</md-option>
+                                      <md-option value="15:00">15:00</md-option>
+                                      <md-option value="16:00">16:00</md-option>
+                                      <md-option value="17:00">17:00</md-option>
+                                      <md-option value="18:00">18:00</md-option>
+                                      <md-option value="19:00">19:00</md-option>
+                                      <md-option value="20:00">20:00</md-option>
+                                      <md-option value="21:00">21:00</md-option>
+                                      <md-option value="22:00">22:00</md-option>
+                                      <md-option value="23:00">23:00</md-option>
+                                      <md-option value="24:00">24:00</md-option>
+                                    </md-select>-->
+                                </md-input-container>
+                            </div>
+                            <div layout layout-sm="column">
+                                <md-input-container flex>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        出发地点<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <input name="start_place" ng-model="carapply.start_place" required
+                                           md-maxlength="50">
+
+                                    <div ng-messages="carapplyform.start_place.$error"
+                                         ng-show="carapplyform.start_place.$dirty || carapplyform.start_place.$touched">
+                                        <div ng-message="required">请输入出发地点！</div>
+                                        <div ng-message="md-maxlength">不能超过50个字</div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        目的地<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <input name="end_place" ng-model="carapply.end_place" required md-maxlength="50">
+
+                                    <div ng-messages="carapplyform.end_place.$error"
+                                         ng-show="carapplyform.end_place.$dirty || carapplyform.end_place.$touched">
+                                        <div ng-message="required">请输入目的地！</div>
+                                        <div ng-message="md-maxlength">不能超过50个字</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                            <md-input-container flex>
+                                <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                   class="md-caption md-primary">
+                                    用车理由<font style="color: red;margin-left: 4px;">*</font></p>
+                                <textarea name="use_reason" ng-model="carapply.use_reason" columns="1" required
+                                          md-maxlength="300"></textarea>
+
+                                <div ng-messages="carapplyform.use_reason.$error"
+                                     ng-show="carapplyform.use_reason.$dirty || carapplyform.use_reason.$touched">
+                                    <div ng-message="required">请输入用车理由！</div>
+                                    <div ng-message="md-maxlength">不能超过300个字</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container flex>
+                                <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                   class="md-caption md-primary">
+                                    同行人员</p>
+                                <textarea name="toggle_persons" ng-model="carapply.toggle_persons" columns="1"
+                                          md-maxlength="200"></textarea>
+
+                                <div ng-messages="carapplyform.toggle_persons.$error"
+                                     ng-show="carapplyform.toggle_persons.$dirty || carapplyform.toggle_persons.$touched">
+                                    <div ng-message="md-maxlength">不能超过200个字</div>
+                                </div>
+                            </md-input-container>
+                        </form>
+                    </md-content>
+                </div>
+            </form>
+            <md-button ng-click="close()" class="md-raised" style="float: right;">
+                关闭
+            </md-button>
+            <md-button ng-click="save()" class="md-raised" style="float: right;">
+                保存
+            </md-button>
+        </md-sidenav>
+        <md-sidenav class="md-sidenav-right md-whiteframe-z2" style="min-width:800px;" md-component-id="right1">
+            <form name="carapplyform1">
+                <div layout="column">
+                    <md-content md-theme="docs-dark" layout-padding layout="row" layout-sm="column">
+                        <h2 class="md-toolbar-tools" style="text-align: center;overflow:hidden;color: white;">
+                            <span>编辑用车申请信息</span>
+                        </h2>
+                    </md-content>
+                    <md-content layout-padding>
+                        <form name="userForm">
+                            <input type="hidden" ng-model="carapply.id">
+
+                            <div layout layout-sm="column">
+                                <md-input-container flex>
+                                    <label>申请人</label>
+                                    <input ng-model="carapply.apply_user" disabled>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label>科室</label>
+                                    <input ng-model="carapply.office_name" disabled>
+                                </md-input-container>
+                            </div>
+                            <div layout layout-sm="column">
+                                <md-input-container flex>
+                                    <label>项目名称</label>
+                                    <input name="project_id" ng-model="carapply.project_id" disabled>
+                                </md-input-container>
+                                <md-select placeholder="用车区间" ng-model="carapply.apply_type"
+                                           md-on-open="loadApplyType()" flex disabled>
+                                    <md-option ng-value="ApplyType.id" ng-repeat="ApplyType in ApplyTypes">
+                                        {{ApplyType.name}}
+                                    </md-option>
+                                </md-select>
+                            </div>
+                            <div layout layout-sm="column">
+                                <md-input-container flex>
+                                    <label>出发日期</label>
+                                    <input name="use_date" ui-date="dateOptions" ng-model="carapply.use_date"
+                                           ui-date-format="yy-mm-dd" disabled>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label>出发时间</label>
+                                    <input name="use_time" ng-model="carapply.use_time" disabled>
+                                </md-input-container>
+                            </div>
+                            <div layout layout-sm="column">
+                                <md-input-container flex>
+                                    <label>出发地点</label>
+                                    <input name="start_place" ng-model="carapply.start_place" disabled>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label>目的地</label>
+                                    <input name="end_place" ng-model="carapply.end_place" disabled>
+                                </md-input-container>
+                            </div>
+                            <md-input-container flex>
+                                <label>用车理由</label>
+                                <textarea name="use_reason" ng-model="carapply.use_reason" columns="1" disabled></textarea>
+                            </md-input-container>
+                            <md-input-container flex>
+                                <label>同行人员</label>
+                                <textarea name="toggle_persons" ng-model="carapply.toggle_persons" columns="1" disabled></textarea>
+                            </md-input-container>
+                        </form>
+                    </md-content>
+                </div>
+                <div layout="column">
+                    <md-content md-theme="docs-dark" layout-padding layout="row" layout-sm="column">
+                        <h2 class="md-toolbar-tools" style="text-align: center;overflow:hidden;color: white;">
+                            <span>用车申请审批</span>
+                        </h2>
+                    </md-content>
+                    <md-content layout-padding>
+                        <input type="hidden" ng-model="carapply.id">
+
+                        <div layout layout-sm="column">
+                            <md-input-container flex>
+                                <label>审批人</label>
+                                <input ng-model="carapply.approve_user" type="text" disabled>
+                            </md-input-container>
+                            <md-input-container flex>
+                                <label>审批时间</label>
+                                <input ng-model="carapply.approve_date" type="date" disabled>
+                            </md-input-container>
+                        </div>
+                        <div layout layout-sm="column">
+                            <md-input-container flex>
+                                <label>车辆牌照</label>
+                                <input name="apply_type" ng-model="carapply.car_license" type="text" disabled>
+                            </md-input-container>
+                        </div>
+                        <div layout layout-sm="column">
+                            <md-input-container flex>
+                                <label>司机姓名</label>
+                                <input name="use_date" type="text" ng-model="carapply.driver_name" disabled>
+                            </md-input-container>
+                            <md-input-container flex>
+                                <label>司机电话</label>
+                                <input name="use_time" type="text" ng-model="carapply.driver_tel" disabled>
+                            </md-input-container>
+                        </div>
+                        <div layout layout-sm="column">
+                            <md-input-container ng-if="carapply.is_agree==1" flex>
+                                <label>审核意见</label>
+                                <input name="use_date" type="text" value="同意" disabled>
+                            </md-input-container>
+                            <md-input-container ng-if="carapply.is_agree==2" flex>
+                                <label>审核意见</label>
+                                <input name="use_date" type="text" value="不同意" disabled>
+                            </md-input-container>
+                        </div>
+                        <!--<md-radio-group ng-model="carapply.is_agree" layout-gt-sm="row" disabled>
+                            <md-radio-button value="1" class="md-primary" disabled>同意</md-radio-button>
+                            <md-radio-button value="2" disabled> 不同意</md-radio-button>
+                        </md-radio-group>-->
+                        <md-input-container flex>
+                            <label>意见说明</label>
+                            <textarea ng-model="carapply.approve_desc" type="textarea" columns="1" disabled></textarea>
+                        </md-input-container>
+                    </md-content>
+                </div>
+                <div layout="column">
+                    <md-content md-theme="docs-dark" layout-padding layout="row" layout-sm="column">
+                        <h2 class="md-toolbar-tools" style="text-align: center;overflow:hidden;color: white;">
+                            <span>里程信息</span>
+                        </h2>
+                    </md-content>
+                    <md-content layout-padding>
+                        <form>
+                            <div layout layout-sm="column">
+                                <md-input-container flex>
+                                    <label>里程数（千米）</label>
+                                    <input ng-model="carapply.car_mileage" type="number" disabled>
+                                </md-input-container>
+                            </div>
+                        </form>
+                    </md-content>
+                </div>
+            </form>
+            <md-button ng-click="close1()" class="md-raised" style="float: right;">
+                关闭
+            </md-button>
+        </md-sidenav>
+    </section>
+</div>

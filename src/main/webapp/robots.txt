@@ -1,0 +1,3 @@
+# robotstxt.org liusibo
+# Test Push
+User-agent: *

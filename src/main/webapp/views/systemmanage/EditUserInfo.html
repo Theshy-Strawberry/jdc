@@ -1,0 +1,43 @@
+<jr-navigation first="系统管理" second="修改用户信息"></jr-navigation>
+<div layout="column" style="background: #E5E9EC;" >
+    <md-content flex style="background: #ffffff;">
+        <form name="userform">
+            <md-input-container flex>
+                <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                   class="md-caption md-primary">
+                    真实姓名:</p>
+                <input type="text" name="real_name" ng-model="sysUsersInfo.real_name" disabled/>
+            </md-input-container>
+            <md-input-container flex>
+                <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                   class="md-caption md-primary">
+                    用户名:</p>
+                <input type="text" name="user_name" ng-model="sysUsersInfo.user_name" disabled/>
+            </md-input-container>
+            <md-input-container flex>
+                <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                   class="md-caption md-primary">
+                    邮件:</p>
+                <input type="text" name="email" ng-model="sysUsersInfo.email"
+                       ng-pattern="/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/"/>
+                <div ng-messages="userform.email.$error" ng-show="userform.email.$dirty || userform.email.$touched">
+                    <div ng-message="pattern">邮箱格式不正确</div>
+                </div>
+            </md-input-container>
+            <md-input-container flex>
+                <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                   class="md-caption md-primary">
+                    手机号:</p>
+                <input type="text" name="telephone" ng-model="sysUsersInfo.telephone"
+                       ng-pattern="/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/"/>
+                <div ng-messages="userform.telephone.$error" ng-show="userform.telephone.$dirty || userform.telephone.$touched">
+                    <div ng-message="pattern">手机号码格式不正确</div>
+                </div>
+            </md-input-container>
+            <md-button ng-click="save()" class="md-raised" style="float: left;">
+                保存
+            </md-button>
+        </form>
+    </md-content>
+</div>
+

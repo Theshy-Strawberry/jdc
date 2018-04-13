@@ -1,0 +1,292 @@
+<jr-navigation first="系统管理" second="工作日记"></jr-navigation>
+<div layout="column">
+    <md-content flex>
+        <md-tabs md-dynamic-height md-border-bottom style="height: 150px;">
+            <md-tab label="个人工作日记">
+                <md-content ng-controller="SysWorkDiaryCTRL">
+                    <md-content flex>
+                        <md-card style="margin-top: 2px;">
+                            <md-card-content>
+                                <form name="SearchForm" >
+                                    <div layout layout-sm="column" class="no-bottom">
+                                        <div layout layout-sm="column" class="no-bottom">
+                                            <div flex class="no-bottom" style="padding-bottom: 1px;">
+                                                <div flex layout layout-sm="column">
+                                                    <md-input-container flex style="padding:2px 2px 0px 2px;">
+                                                        <label>开始日期</label>
+                                                        <input type="date" name="create_date"
+                                                               ng-model="obj.searchObj.START$create_date" aria-label="日期开始" >
+                                                    </md-input-container>
+                                                    <p style="margin: 0.2em 1em;"><label style="margin-top: 21px;">~</label></p>
+                                                    <md-input-container flex style="padding:2px 2px 0px 2px;">
+                                                        <label>结束日期</label>
+                                                        <input type="date" name="create_date"
+                                                               ng-model="obj.searchObj.END$create_date" aria-label="日期结束" >
+                                                    </md-input-container>
+                                                </div>
+                                                <div ng-messages="SearchForm.create_date.$error" class="ng-active" flex>
+                                                    <div ng-if="obj.searchObj.END$create_date != null && (obj.searchObj.END$create_date-obj.searchObj.START$create_date<0)" class="ng-scope"
+                                                         style="color: rgb(244,67,54);font-size: 12px;">
+                                                        结束日期必须大于开始日期！</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <md-input-container flex style="padding-bottom: 1px;">
+                                        </md-input-container>
+                                        <md-input-container flex style="padding-bottom: 1px;">
+                                        </md-input-container>
+                                    </div>
+                                </form>
+                            </md-card-content>
+                            <div class="md-actions" layout="row" layout-align="end center">
+                                <md-button ng-click="toggleRight()" class="md-raised" layout layout-align="center end">添加</md-button>
+                                <md-button ng-click="search()" class="md-raised" layout layout-align="center end">查询</md-button>
+                            </div>
+                        </md-card>
+                    </md-content>
+                    <section layout="row" flex>
+                        <md-content flex>
+                            <md-card style="margin-top: 2px;">
+                                <md-card-content>
+                                    <div ui-grid="gridOptions" ui-grid-pagination ui-grid-pinning
+                                         ui-grid-resize-columns ui-grid-auto-resize></div>
+                                </md-card-content>
+                            </md-card>
+                        </md-content>
+                        <md-sidenav class="md-sidenav-right md-whiteframe-z2" style="min-width:800px;" md-component-id="right">
+                            <form name="userform">
+                                <div layout="column">
+                                    <md-content md-theme="docs-dark" layout-padding layout="row" layout-sm="column">
+                                        <h2 class="md-toolbar-tools" style="text-align: center;overflow:hidden;color: white;">
+                                            <span>编辑日记</span>
+                                        </h2>
+                                    </md-content>
+                                    <md-content layout-padding>
+                                        <form>
+                                            <input type="hidden" ng-model="obj.object.id">
+                                            <div layout layout-sm="column">
+                                                <md-input-container flex>
+                                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                                       class="md-caption md-primary">
+                                                        填写人:<font style="color: red;margin-left: 4px;">*</font></p>
+                                                    <input ng-model="obj.object.authors" disabled>
+                                                </md-input-container>
+                                                <md-input-container flex>
+                                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                                       class="md-caption md-primary">
+                                                        填写时间:<font style="color: red;margin-left: 4px;">*</font></p>
+                                                    <input name="create_date" ng-model="obj.object.create_date |date:'yyyy/MM/dd'" date-format aria-label="填写时间" disabled>
+                                                </md-input-container>
+                                            </div>
+                                            <div layout layout-sm="column">
+                                                <md-input-container flex md-no-float>
+                                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                                       class="md-caption md-primary">
+                                                        所属科室<font style="color: red;margin-left: 4px;">*</font></p>
+                                                    <input ng-model="obj.object.office_id | officeFilter:officeInfos" disabled>
+                                                </md-input-container>
+                                            </div>
+                                            <div layout layout-sm="column">
+                                                <md-input-container flex md-no-float>
+                                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                                       class="md-caption md-primary">
+                                                        日记内容<font style="color: red;margin-left: 4px;">*</font></p>
+                                                    <textarea name="diary_content" ng-model="obj.object.diary_content" type="textarea"
+                                                        style="height: 155px;" aria-label="日记内容"
+                                                        columns="6" md-maxlength="800" required></textarea>
+                                                    <div ng-messages="userform.diary_content.$error"
+                                                         ng-show="userform.diary_content.$dirty || userform.diary_content.$touched">
+                                                        <div ng-message="required">请输入日记内容！</div>
+                                                        <div ng-message="md-maxlength">不能超过800字！</div>
+                                                    </div>
+                                                </md-input-container>
+                                            </div>
+                                        </form>
+                                    </md-content>
+                                </div>
+                            </form>
+                            <md-button ng-click="close()" class="md-raised" style="float: right;">
+                                关闭
+                            </md-button>
+                            <md-button ng-click="save()" class="md-raised" style="float: right;">
+                                保存
+                            </md-button>
+                        </md-sidenav>
+                    </section>
+                </md-content>
+            </md-tab>
+            <md-tab label="汇总工作日记" ng-if="sysUsersInfo.job_title != 1">
+                <md-content flex ng-controller="SysWorkDiaryAllCTRL">
+                    <md-content flex>
+                        <md-card style="margin-top: 2px;">
+                            <md-card-content>
+                                <form name="SearchForm" >
+                                    <div layout layout-sm="column" class="no-bottom">
+                                        <div layout layout-sm="column" class="no-bottom">
+                                            <div flex class="no-bottom" style="padding-bottom: 1px;">
+                                                <div flex layout layout-sm="column">
+                                                    <md-input-container flex style="padding:2px 2px 0px 2px;">
+                                                        <label>汇总日期开始</label>
+                                                        <input type="date" name="apply_date"
+                                                               ng-model="obj.searchObj.START$start_date" aria-label="汇总日期开始" >
+                                                    </md-input-container>
+                                                    <p style="margin: 0.2em 1em;"><label style="margin-top: 21px;">~</label></p>
+                                                    <md-input-container flex style="padding:2px 2px 0px 2px;">
+                                                        <label>汇总日期结束</label>
+                                                        <input type="date" name="apply_date"
+                                                               ng-model="obj.searchObj.END$end_date" aria-label="汇总日期结束" >
+                                                    </md-input-container>
+                                                </div>
+                                                <div ng-messages="SearchForm.report_date.$error" class="ng-active" flex>
+                                                    <div ng-if="obj.searchObj.END$end_date != null && (obj.searchObj.END$end_date-obj.searchObj.START$start_date<0)" class="ng-scope"
+                                                         style="color: rgb(244,67,54);font-size: 12px;">
+                                                        结束日期只可选择晚于开始日期的时间！</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <md-input-container flex style="padding-bottom: 1px;">
+                                        </md-input-container>
+                                        <md-input-container flex style="padding-bottom: 1px;">
+                                        </md-input-container>
+                                    </div>
+                                </form>
+                            </md-card-content>
+                            <div class="md-actions" layout="row" layout-align="end center">
+                                <md-button ng-click="toggleRight()" class="md-raised" layout layout-align="center end">汇总</md-button>
+                                <md-button ng-click="search()" class="md-raised" layout layout-align="center end">查询</md-button>
+                            </div>
+                        </md-card>
+                    </md-content>
+                    <section layout="row" flex>
+                        <md-content flex>
+                            <md-card style="margin-top: 2px;">
+                                <md-card-content>
+                                    <div ui-grid="gridOptions1" ui-grid-pagination ui-grid-pinning
+                                         ui-grid-resize-columns ui-grid-auto-resize></div>
+                                </md-card-content>
+                            </md-card>
+                        </md-content>
+                        <md-sidenav class="md-sidenav-right md-whiteframe-z2" style="min-width:800px;" md-component-id="right2">
+                            <form name="userform">
+                                <div layout="column">
+                                    <md-content md-theme="docs-dark" layout-padding layout="row" layout-sm="column">
+                                        <h2 class="md-toolbar-tools" style="text-align: center;overflow:hidden;color: white;">
+                                            <span>编辑日记</span>
+                                        </h2>
+                                    </md-content>
+                                    <md-content layout-padding>
+                                        <form>
+                                            <input type="hidden" ng-model="obj.object.id">
+                                            <div layout layout-sm="column">
+                                                <!--<md-input-container flex>-->
+                                                    <!--<p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"-->
+                                                       <!--class="md-caption md-primary">-->
+                                                        <!--汇总人:<font style="color: red;margin-left: 4px;">*</font></p>-->
+                                                    <!--<input ng-model="obj.object.summary_user" disabled>-->
+                                                <!--</md-input-container>-->
+                                                <input type="hidden"  ng-model="obj.object.id">
+                                                <md-input-container flex>
+                                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                                       class="md-caption md-primary">
+                                                        汇总期间</p>
+                                                    <label style="margin-bottom:10px;top:-15px;">{{obj.object.start_time}}&nbsp;~&nbsp;{{obj.object.end_time}}</label>
+                                                </md-input-container>
+                                                <md-input-container flex>
+                                                </md-input-container>
+                                            </div>
+                                            <div layout layout-sm="column">
+                                                <md-input-container flex>
+                                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                                       class="md-caption md-primary">
+                                                        汇总标题:<font style="color: red;margin-left: 4px;">*</font></p>
+                                                    <input ng-model="obj.object.summary_name" disabled  style="margin-bottom:10px;top:-15px;">
+                                                </md-input-container>
+                                            </div>
+                                            <div layout layout-sm="column">
+                                                <md-input-container flex md-no-float>
+                                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                                       class="md-caption md-primary">
+                                                        汇总工作日记<font style="color: red;margin-left: 4px;">*</font></p>
+                                            <textarea name="summary_content" ng-model="obj.object.summary_content" type="textarea"
+                                                      style="height: 255px;min-height:225px;" aria-label="汇总工作日记"
+                                                      columns="6" md-maxlength="100000" readonly="readonly"></textarea>
+
+                                                </md-input-container>
+                                            </div>
+                                            <div layout layout-sm="column">
+                                                <md-input-container flex md-no-float>
+                                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                                       class="md-caption md-primary">
+                                                        汇总内容<font style="color: red;margin-left: 4px;">*</font></p>
+                                            <textarea name="summary_content" ng-model="obj.object.content" type="textarea"
+                                                      style="height: 255px;min-height:225px;" aria-label="汇总内容"
+                                                      columns="6" md-maxlength="100000"></textarea>
+                                                </md-input-container>
+                                            </div>
+                                        </form>
+                                    </md-content>
+                                </div>
+                            </form>
+                            <md-button ng-click="close()" class="md-raised" style="float: right;">
+                                关闭
+                            </md-button>
+                            <md-button ng-click="save()" class="md-raised" style="float: right;">
+                                保存
+                            </md-button>
+                        </md-sidenav>
+                        <md-sidenav class="md-sidenav-right md-whiteframe-z2" style="min-width:800px;" md-component-id="right3">
+                            <form name="userform">
+                                <div layout="column">
+                                    <md-content md-theme="docs-dark" layout-padding layout="row" layout-sm="column">
+                                        <h2 class="md-toolbar-tools" style="text-align: center;overflow:hidden;color: white;">
+                                            <span>查看日记</span>
+                                        </h2>
+                                    </md-content>
+                                    <md-content layout-padding>
+                                        <form>
+                                            <input type="hidden" ng-model="obj.object.id">
+                                            <div layout layout-sm="column">
+                                                <md-input-container flex>
+                                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                                       class="md-caption md-primary">
+                                                        汇总期间</p>
+                                                    <label style="margin-bottom:10px;top:-15px;">{{obj.object.start_time}}&nbsp;~&nbsp;{{obj.object.end_time}}</label>
+                                                </md-input-container>
+                                                <md-input-container flex>
+                                                </md-input-container>
+                                            </div>
+                                            <div layout layout-sm="column">
+                                                <md-input-container flex>
+                                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                                       class="md-caption md-primary">
+                                                        汇总标题:<font style="color: red;margin-left: 4px;">*</font></p>
+                                                    <label>{{obj.object.summary_name}}</label>
+                                                </md-input-container>
+                                            </div>
+                                            <div layout layout-sm="column">
+                                                <md-input-container flex md-no-float>
+                                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                                       class="md-caption md-primary">
+                                                        汇总内容<font style="color: red;margin-left: 4px;">*</font></p>
+                                                    <textarea name="summary_content" ng-model="obj.object.summary_content" type="textarea"
+                                                              style="height: 255px;min-height: 255px;" aria-label="汇总内容" readonly="readonly"
+                                                              columns="6" md-maxlength="100000"></textarea>
+                                                </md-input-container>
+                                            </div>
+                                        </form>
+                                    </md-content>
+                                </div>
+                            </form>
+                            <md-button ng-click="close3()" class="md-raised" style="float: right;">
+                                关闭
+                            </md-button>
+                        </md-sidenav>
+                    </section>
+
+                </md-content>
+
+            </md-tab>
+
+        </md-tabs>
+    </md-content>
+</div>

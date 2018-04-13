@@ -1,0 +1,162 @@
+<jr-navigation first="系统管理" second="项目数据类型管理"></jr-navigation>
+<style>
+    .headerCss{
+        text-align: center;
+    }
+    .cellCss{
+        text-align: center;
+    }
+</style>
+<div layout="column" style="background: #E5E9EC;" ng-controller="projectDataTypeManagementCTRL as ctrl">
+    <!-- 上方查询框-->
+    <md-content flex style="background: #E5E9EC;">
+        <md-card style="margin-top: 2px;">
+            <md-card-content>
+                <form name="SearchForm">
+                    <div layout layout-sm="column" class="no-bottom">
+                        <md-input-container flex style="padding-bottom: 1px;">
+                            <label>项目编号：</label>
+                            <!-- 绑定project_id即可 like是模糊查询-->
+                            <input ng-model="obj.searchObj.LIKE$project_id">
+                        </md-input-container>
+                        <md-input-container flex style="padding-bottom: 1px;">
+                            <label>项目名称：</label>
+                            <!-- 绑定project_id即可 like是模糊查询-->
+                            <input ng-model="obj.searchObj.LIKE$project_name">
+                        </md-input-container>
+                        <md-input-container flex style="padding-bottom: 1px;">
+                            <label>甲方主体：</label>
+                            <!-- 绑定project_id即可 like是模糊查询-->
+                            <input ng-model="obj.searchObj.LIKE$first_party_name">
+                        </md-input-container>
+                    </div>
+                    <div layout layout-sm="column" class="no-bottom">
+                        <md-input-container flex style="padding-bottom: 1px;">
+                            <jr-select label-name="乙方名称" jr-datas="businessMainPart" jr-model="obj.searchObj.EQ$second_party_id"
+                                       show-value="id" show-text="company_name" flex style="padding-bottom: 1px;">
+                            </jr-select>
+                        </md-input-container>
+                        <div flex class="no-bottom" style="padding-bottom: 1px;">
+                            <div flex layout layout-sm="column">
+                                <md-input-container flex style="padding:2px 2px 0px 2px;">
+                                    <label>有效期开始时间</label>
+                                    <input type="date" name="effective_begin_date"
+                                           ng-model="obj.searchObj.START$effective_begin_date" aria-label="有效期开始时间" >
+                                </md-input-container>
+                                <p style="margin: 0.2em 1em;"><label style="margin-top: 21px;">~</label></p>
+                                <md-input-container flex style="padding:2px 2px 0px 2px;">
+                                    <label>有效期结束时间</label>
+                                    <input type="date" name="effective_end_date"
+                                           ng-model="obj.searchObj.END$effective_end_date" aria-label="有效期结束时间" >
+                                </md-input-container>
+                            </div>
+                            <div ng-messages="SearchForm.expiry_end.$error" class="ng-active" flex>
+                                <div ng-if="obj.searchObj.LIKE$expiry_begin != null && obj.searchObj.LIKE$expiry_end != null && (obj.searchObj.LIKE$expiry_end-obj.searchObj.LIKE$expiry_begin<0)" class="ng-scope"
+                                     style="color: rgb(244,67,54);font-size: 12px;">
+                                    结束日期只可选择晚于开始日期的时间！</div>
+                            </div>
+                        </div>
+                        <md-input-container flex style="padding-bottom: 1px;">
+                        </md-input-container>
+                    </div>
+
+                </form>
+            </md-card-content>
+            <div class="md-actions" layout="row" layout-align="end center">
+                <!-- 查询按钮 点击访问 search（）方法-->
+                <md-button ng-click="search()" class="md-raised" layout layout-align="center end">查询</md-button>
+            </div>
+        </md-card>
+    </md-content>
+    <!--添加界面/修改页面-->
+    <section layout="row" flex>
+        <md-content flex style="background: #E5E9EC;">
+            <md-card style="margin-top: 2px;">
+                <md-card-content>
+                    <div ui-grid="gridOptions" ui-grid-pagination ui-grid-pinning
+                         ui-grid-resize-columns ui-grid-auto-resize></div>
+                </md-card-content>
+            </md-card>
+        </md-content>
+        <md-sidenav class="md-sidenav-right md-whiteframe-z2" style="min-width:800px;" md-component-id="right">
+            <form name="user_form">
+                <div layout="column">
+                    <md-content md-theme="docs-dark" layout-padding layout="row" layout-sm="column">
+                        <h2 class="md-toolbar-tools" style="text-align: center;overflow:hidden;color: white;">
+                            <span>添加项目数据类型信息</span>
+                        </h2>
+                    </md-content>
+                    <md-content layout-padding>
+                        <form>
+                            <input type="hidden" ng-model="obj.object.id">
+                            <div layout layout-sm="column">
+                                <md-input-container flex>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        项目名称:</p>
+                                    <input name="project_name" type="text" ng-model="obj.object.project_name" disabled>
+                                </md-input-container>
+                                <md-input-container flex md-no-float>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        项目数据类型<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <md-select name="tab_code" placeholder="-&#45;&#45;&nbsp;请选择&nbsp;-&#45;&#45;" aria-label="商品类别名称"
+                                               ng-model="obj.object.tab_code" ng-change="checkDataType(obj.object.tab_code)" required>
+                                        <md-option ng-value="">-&#45;&#45;&nbsp;请选择&nbsp;-&#45;&#45;</md-option>
+                                        <md-option ng-repeat="dataType in dataTypes" ng-value="dataType.tab_code">
+                                            {{dataType.tab_name}}
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="user_form.tab_code.$error"
+                                         ng-show="user_form.tab_code.$dirty || user_form.tab_code.$touched">
+                                        <div ng-message="required">请选择项目数据类型！</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                            <div layout layout-sm="column">
+                                <md-input-container flex md-no-float>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        人员名称<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <md-select name="user_id" placeholder="-&#45;&#45;&nbsp;请选择&nbsp;-&#45;&#45;" aria-label="商品类别名称"
+                                               ng-model="obj.object.user_id" required>
+                                        <md-option ng-value="">-&#45;&#45;&nbsp;请选择&nbsp;-&#45;&#45;</md-option>
+                                        <md-option ng-repeat="projectUser in projectUsers" ng-value="projectUser.user_id">
+                                            {{projectUser.real_name}}
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="user_form.user_id.$error"
+                                         ng-show="user_form.user_id.$dirty || user_form.user_id.$touched">
+                                        <div ng-message="required">请选择人员名称！</div>
+                                    </div>
+                                </md-input-container>
+                                <div ng-repeat="item in authInfo" style="display: inline-flex;margin-right: 2px;">
+                                    <md-checkbox ng-model="item.selected" style="line-height: 44px;">
+                                        {{ item.name }}
+                                    </md-checkbox>
+                                </div>
+                            </div>
+                            <md-content flex style="background: #E5E9EC;">
+                                <md-card style="margin-top: 2px;">
+                                    <md-card-content>
+                                        <div ui-grid="gridOptions2" ui-grid-pagination ui-grid-selection ui-grid-edit ui-grid-pinning
+                                             ui-grid-auto-resize
+                                             class="grid"></div>
+                                    </md-card-content>
+                                </md-card>
+                            </md-content>
+                        </form>
+                    </md-content>
+                </div>
+            </form>
+            <!-- 关闭按钮 访问关闭方法-->
+            <md-button ng-click="close()" class="md-raised" style="float: right;">
+                关闭
+            </md-button>
+            <!-- 保存按钮 访问保存方法-->
+            <md-button ng-click="save()" class="md-raised" style="float: right;">
+                保存
+            </md-button>
+        </md-sidenav>
+    </section>
+</div>

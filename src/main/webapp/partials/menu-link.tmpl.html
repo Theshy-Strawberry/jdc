@@ -1,0 +1,12 @@
+<md-button style="color: white;font-size: 13px;"
+           ng-class="{'active' : isSelected()}"
+           ng-href="{{(section.menu_type === 'version' ? '' : '#') + section.menu_url}}"
+           ng-click="focusSection()">
+    <md-icon md-svg-src="images/icons/iconfont-biaoqian.svg" style="color: white;width: 10px;height: 10px;"></md-icon>
+    &nbsp;&nbsp;{{section | humanize}}
+    <!--<span class="badge">3</span>-->
+  <span class="md-visually-hidden"
+        ng-if="isSelected()">
+    current page
+  </span>
+</md-button>

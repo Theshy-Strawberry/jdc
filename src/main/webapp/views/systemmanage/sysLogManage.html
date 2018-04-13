@@ -1,0 +1,59 @@
+<style>
+    .headerCss{
+        text-align: center;
+    }
+    .cellCss{
+        text-align: center;
+    }
+</style>
+<jr-navigation first="系统管理" second="日志管理"></jr-navigation>
+<div layout="column" style="background: #E5E9EC;" ng-controller="SysLogCTRL as ctrl">
+    <md-content flex style="background: #E5E9EC;" >
+        <md-card style="margin-top: 2px;" ng-hide="obj.QueryOpt.type">
+            <md-progress-linear md-mode="{{obj.progress.mode}}"></md-progress-linear>
+            <md-card-content>
+                <form name="SearchForm" >
+                    <div layout  layout-gt-sm="row" style="padding-bottom: 0px;">
+                        <md-input-container flex  style="padding-bottom: 1px;">
+                            <label>操作内容</label>
+                            <input ng-model="obj.searchObj.LIKE$handle_content">
+                        </md-input-container>
+                        <md-input-container flex style="padding-bottom: 1px;">
+                            <jr-select label-name="模块名称" jr-datas="moduleNames" jr-model="obj.searchObj.LIKE$module_name"
+                                       show-value="module_name" show-text="module_name" flex style="padding-bottom: 1px;">
+                            </jr-select>
+                        </md-input-container>
+                        <md-input-container flex style="padding-bottom: 1px;"></md-input-container>
+                    </div>
+                    <div layout  layout-gt-sm="row" style="padding-bottom: 0px;">
+                        <jr-select label-name="操作类型" jr-datas="selectData.handleTypes" jr-model="obj.searchObj.EQ$handle_type"
+                                   show-value="id" show-text="text" flex style="padding-bottom: 1px;">
+                        </jr-select>
+                        <md-input-container flex style="padding-bottom: 1px;">
+                            <jr-select label-name="操作用户" jr-datas="handleUsers" jr-model="obj.searchObj.EQ$handle_user"
+                                       show-value="user_name" show-text="real_name" flex style="padding-bottom: 1px;">
+                            </jr-select>
+                        </md-input-container>
+                        <md-input-container flex style="padding-bottom: 1px;"></md-input-container>
+                    </div>
+                    <div class="md-actions" layout="row" layout-align="end center">
+                        <md-button ng-click="search()" class="md-raised" layout layout-align="center end">查询</md-button>
+                    </div>
+                </form>
+            </md-card-content>
+        </md-card>
+    </md-content>
+    <md-button class="md-primary md-fab md-fab-top-right" ng-click="queryClose()" style="top: 50px;">
+        {{obj.QueryOpt.name}}
+    </md-button>
+    <section layout="row" flex>
+        <md-content flex style="background: #E5E9EC;">
+            <md-card style="margin-top: 2px;">
+                <md-card-content>
+                    <div ui-grid="gridOptions" ui-grid-pagination ui-grid-pinning
+                         ui-grid-resize-columns ui-grid-auto-resize></div>
+                </md-card-content>
+            </md-card>
+        </md-content>
+    </section>
+</div>

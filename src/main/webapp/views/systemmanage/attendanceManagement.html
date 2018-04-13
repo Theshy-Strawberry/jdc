@@ -1,0 +1,26 @@
+<jr-navigation first="系统管理" second="考勤管理"></jr-navigation>
+
+<div layout="column" style="background: #E5E9EC;">
+    <section layout="row" flex>
+        <md-content flex style="background: #ffffff;">
+            <md-tabs md-dynamic-height md-border-bottom md-selected="0" md-autoselect>
+                <md-tab label="{{data.office_name}}" ng-repeat="data in officeInfos"  md-on-select="getTabs(data)">
+                    <md-card style="margin-top: 2px;">
+                        <md-card-content>
+                            <md-tabs md-dynamic-height md-selected="selectedIndex" md-border-bottom md-autoselect>
+                                <md-tab label="{{m.name}}" ng-repeat="m in obj.months" md-on-select="getTable(m)">
+                                    <md-card style="margin-top: 2px;" ng-if="m.id == showDate">
+                                        <md-card-content>
+                                            <div ui-grid="gridOptions" ui-grid-pagination ui-grid-pinning
+                                                 ui-grid-resize-columns ui-grid-auto-resize></div>
+                                        </md-card-content>
+                                    </md-card>
+                                </md-tab>
+                            </md-tabs>
+                        </md-card-content>
+                    </md-card>
+                </md-tab>
+            </md-tabs>
+        </md-content>
+    </section>
+</div>

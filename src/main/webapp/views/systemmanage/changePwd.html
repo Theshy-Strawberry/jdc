@@ -1,0 +1,55 @@
+<jr-navigation first="系统管理" second="密码修改"></jr-navigation>
+<div layout="column" style="background: #E5E9EC;" ng-controller="ChangePwdCTRL as ctrl">
+    <md-content flex style="background: #E5E9EC;">
+        <md-card style="margin-top: 2px;">
+            <md-card-content>
+                <form name="userform">
+                    <br>
+                    <md-input-container flex>
+                        <p style="margin:10px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                           class="md-caption md-primary">
+                            原密码:<font style="color: red;margin-left: 4px;">*</font></p>
+                        <input type="password" id="user_pwd" name="user_pwd" ng-model="pwd.user_pwd"
+                               md-maxlength="20"  md-minlength="6" required/>
+                        <div ng-messages="userform.user_pwd.$error" ng-show="userform.user_pwd.$dirty || userform.user_pwd.$touched">
+                            <div ng-message="required">原密码不能为空</div>
+                            <div ng-message="md-maxlength">最多20位</div>
+                            <div ng-message="md-minlength">最少6位</div>
+                        </div>
+                    </md-input-container>
+                    </br>
+                    <md-input-container flex>
+                        <p style="margin:10px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                           class="md-caption md-primary">
+                            新密码:<font style="color: red;margin-left: 4px;">*</font></p>
+                        <input type="password" id="new_user_pwd" name="new_user_pwd" ng-model="pwd.new_user_pwd"
+                               md-maxlength="20"  md-minlength="6" required/>
+                        <div ng-messages="userform.new_user_pwd.$error" ng-show="userform.new_user_pwd.$dirty || userform.new_user_pwd.$touched">
+                            <div ng-message="required">新密码不能为空</div>
+                            <div ng-message="md-maxlength">最多20位</div>
+                            <div ng-message="md-minlength">最少6位</div>
+                        </div>
+                    </md-input-container>
+                    </br>
+                    <md-input-container flex>
+                        <p style="margin:10px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                           class="md-caption md-primary">
+                            确认密码:<font style="color: red;margin-left: 4px;">*</font></p>
+                        <input type="password" id="confirm_user_pwd" name="confirm_user_pwd" ng-model="pwd.confirm_user_pwd"
+                               md-maxlength="20"  md-minlength="6" required/>
+                        <div ng-messages="userform.confirm_user_pwd.$error" ng-show="userform.confirm_user_pwd.$dirty || userform.confirm_user_pwd.$touched">
+                            <div ng-message="required">确认密码不能为空</div>
+                            <div ng-message="md-maxlength">最多20位</div>
+                            <div ng-message="md-minlength">最少6位</div>
+                        </div>
+                    </md-input-container>
+                    </br>
+                    <md-button ng-click="save()" class="md-raised" style="float: left;">
+                        保存
+                    </md-button>
+                </form>
+            </md-card-content>
+        </md-card>
+    </md-content>
+</div>
+

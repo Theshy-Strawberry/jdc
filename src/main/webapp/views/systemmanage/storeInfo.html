@@ -1,0 +1,191 @@
+<jr-navigation first="系统管理" second="门店信息"></jr-navigation>
+<style>
+    .headerCss{
+        text-align: center;
+    }
+</style>
+<div layout="column" style="background: #E5E9EC;" ng-controller="storeInfoCTRL as ctrl">
+    <md-content flex style="background: #E5E9EC;">
+        <md-card style="margin-top: 2px;">
+            <md-card-content>
+                <form name="SearchForm">
+                    <div layout layout-sm="column" class="no-bottom">
+                        <md-input-container flex style="padding-bottom: 1px;">
+                            <label>门店名称：</label>
+                            <input ng-model="obj.searchObj.LIKE$channel_name">
+                        </md-input-container>
+                        <jr-select label-name="渠道公司" jr-datas="channelNames" jr-model="obj.searchObj.EQ$channel_id"
+                                   show-value="id" show-text="company_name" flex style="padding-bottom: 1px;">
+                        </jr-select>
+                        <div layout layout-sm="column" class="no-bottom">
+                            <div flex class="no-bottom" style="padding-bottom: 1px;">
+                                <div flex layout layout-sm="column">
+                                    <md-input-container flex style="padding:2px 2px 0px 2px;">
+                                        <label>创建时间：</label>
+                                        <input type="date" name="create_date"
+                                               ng-model="obj.searchObj.START$create_date" aria-label="创建时间" >
+                                    </md-input-container>
+                                    <p style="margin: 0.2em 1em;"><label style="margin-top: 21px;">~</label></p>
+                                    <md-input-container flex style="padding:2px 2px 0px 2px;">
+                                        <label>结束时间：</label>
+                                        <input type="date" name="create_date"
+                                               ng-model="obj.searchObj.END$create_date" aria-label="结束时间" >
+                                    </md-input-container>
+                                </div>
+                                <div ng-messages="SearchForm.create_date.$error" class="ng-active" flex>
+                                    <div ng-if="obj.searchObj.END$create_date != null && (obj.searchObj.END$create_date-obj.searchObj.START$create_date<0)" class="ng-scope"
+                                         style="color: rgb(244,67,54);font-size: 12px;">
+                                        结束日期只可选择晚于开始日期的时间！</div>
+                                </div>
+                            </div>
+                        </div>
+                        <md-input-container flex style="padding-bottom: 1px;"></md-input-container>
+                    </div>
+                    <div layout layout-sm="column" class="no-bottom">
+                        <md-input-container flex style="padding-bottom: 1px;">
+                            <label>渠道总监：</label>
+                            <input ng-model="obj.searchObj.LIKE$channel_director">
+                        </md-input-container>
+                        <md-input-container flex style="padding-bottom: 1px;">
+                            <label>渠道经理：</label>
+                            <input ng-model="obj.searchObj.LIKE$channel_manager">
+                        </md-input-container>
+                        <md-input-container flex style="padding-bottom: 1px;"></md-input-container>
+                        <md-input-container flex style="padding-bottom: 1px;"></md-input-container>
+                    </div>
+                </form>
+            </md-card-content>
+            <div class="md-actions" layout="row" layout-align="end center">
+                <md-button ng-click="toggleRight()" class="md-raised" layout layout-align="center end">添加</md-button>
+                <md-button ng-click="search()" class="md-raised" layout layout-align="center end">查询</md-button>
+            </div>
+        </md-card>
+    </md-content>
+    <section layout="row" flex>
+        <md-content flex style="background: #E5E9EC;">
+            <md-card style="margin-top: 2px;">
+                <md-card-content>
+                    <div ui-grid="gridOptions" ui-grid-pagination ui-grid-pinning
+                         ui-grid-resize-columns></div>
+                </md-card-content>
+            </md-card>
+        </md-content>
+        <md-sidenav class="md-sidenav-right md-whiteframe-z2" style="min-width:800px;" md-component-id="right">
+            <form name="user_form">
+                <div layout="column">
+                    <md-content md-theme="docs-dark" layout-padding layout="row" layout-sm="column">
+                        <h2 class="md-toolbar-tools" style="text-align: center;overflow:hidden;color: white;">
+                            <span>编辑门店信息</span>
+                        </h2>
+                    </md-content>
+                    <md-content layout-padding>
+                        <form>
+                            <input type="hidden" ng-model="obj.object.id">
+                            <div layout layout-sm="column">
+                                <md-input-container flex>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        门店名称:<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <input name="channel_name" type="text" ng-model="obj.object.channel_name" required
+                                           ng-maxlength="200" ng-pattern="/^[\u4e00-\u9fa5a-zA-Z0-9]+$/">
+                                    <div ng-messages="user_form.channel_name.$error"
+                                         ng-show="user_form.channel_name.$dirty || user_form.channel_name.$touched">
+                                        <div ng-message="required">请输入门店名称！</div>
+                                        <div ng-message="maxlength">门店名称不能超过200个字节！</div>
+                                        <div ng-message="pattern">门店名称只能输入中英文字符或者数字！</div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container flex md-no-float>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        渠道公司<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <md-select name="channel_id" placeholder="---&nbsp;请选择&nbsp;---"
+                                               ng-model="obj.object.channel_id" required>
+                                        <md-option ng-value="">---&nbsp;请选择&nbsp;---</md-option>
+                                        <md-option ng-repeat="data in channelNames" ng-value="data.id">{{
+                                            data.company_name}}
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="user_form.channel_id.$error"
+                                         ng-show="user_form.channel_id.$dirty || user_form.channel_id.$touched">
+                                        <div ng-message="required">请选择渠道公司！</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                            <div layout layout-sm="column">
+                                <md-input-container flex>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        渠道总监:<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <input name="channel_director" type="text" ng-model="obj.object.channel_director" required
+                                           ng-maxlength="20" ng-pattern="/^[\u4e00-\u9fa5a-zA-Z0-9]+$/">
+                                    <div ng-messages="user_form.channel_director.$error"
+                                         ng-show="user_form.channel_director.$dirty || user_form.channel_director.$touched">
+                                        <div ng-message="required">请输入渠道总监名称！</div>
+                                        <div ng-message="maxlength">渠道总监名称不能超过20个字节！</div>
+                                        <div ng-message="pattern">渠道总监只能输入中英文字符或者数字！</div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        渠道经理:<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <input name="channel_manager" type="text" ng-model="obj.object.channel_manager" required
+                                           ng-maxlength="20" ng-pattern="/^[\u4e00-\u9fa5a-zA-Z0-9]+$/">
+                                    <div ng-messages="user_form.channel_manager.$error"
+                                         ng-show="user_form.channel_manager.$dirty || user_form.channel_manager.$touched">
+                                        <div ng-message="required">请输入渠道经理名称！</div>
+                                        <div ng-message="maxlength">渠道经理名称不能超过20个字节！</div>
+                                        <div ng-message="pattern">渠道经理只能输入中英文字符或者数字！</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                            <div layout layout-sm="column" ng-if="openFlg==1">
+                                <md-input-container flex md-no-float>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        创建人:<font style="color: red;margin-left: 4px;"></font></p>
+                                    <input name="create_user" type="text" ng-model="obj.object.create_user" disabled="disabled">
+                                </md-input-container>
+                                <md-input-container flex md-no-float>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        创建时间:<font style="color: red;margin-left: 4px;"></font></p>
+                                    <input name="create_date" type="text"  ng-model="obj.object.create_date |date:'yyyy-MM-dd'" disabled="disabled">
+                                </md-input-container>
+                            </div>
+                            <div layout layout-sm="column" ng-if="openFlg==2">
+                                <md-input-container flex md-no-float>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        修改人:<font style="color: red;margin-left: 4px;"></font></p>
+                                    <input name="modify_user" type="text" ng-model="obj.object.modify_user" disabled="disabled">
+                                </md-input-container>
+                                <md-input-container flex md-no-float>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        修改时间:<font style="color: red;margin-left: 4px;"></font></p>
+                                    <input name="modify_date" type="text"  ng-model="obj.object.modify_date |date:'yyyy-MM-dd'" disabled="disabled">
+                                </md-input-container>
+                            </div>
+                            <div layout layout-sm="column">
+                                <md-input-container flex md-no-float>
+                                </md-input-container>
+                                <md-input-container flex md-no-float>
+                                </md-input-container>
+                            </div>
+                            <div layout layout-sm="column">
+                            </div>
+                        </form>
+                    </md-content>
+                </div>
+            </form>
+            <md-button ng-click="close()" class="md-raised" style="float: right;">
+                关闭
+            </md-button>
+            <md-button ng-click="save()" class="md-raised" style="float: right;">
+                保存
+            </md-button>
+        </md-sidenav>
+    </section>
+</div>

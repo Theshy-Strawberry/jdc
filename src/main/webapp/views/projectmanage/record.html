@@ -1,0 +1,196 @@
+<!-- Nested node template -->
+<style>
+    .headerCss{
+        text-align: center;
+    }
+    .cellCss{
+        text-align: center;
+    }
+    .red {
+        /*background-color: red;*/
+        color: red;
+    }
+    .gray{
+        color: #555555;
+    }
+</style>
+<script type="text/ng-template" id="nodes_renderer.html">
+    <md-button aria-label="Open demo menu" class="tree-node tree-node-content" style="width: 200px;margin: 6px 0px;"   ng-mousedown="openMenu($mdOpenMenu, $event,this,node)">
+        <div ui-tree-handle class="tree-node tree-node-content menu-demo-container"  layout="row" layout-align="start center">
+            <a class="btn btn-success btn-xs" ng-if="node.nodes && node.nodes.length > 0" data-nodrag>
+                <span class="glyphicon"  ng-class="{'glyphicon-chevron-right': collapsed,'glyphicon-chevron-down': !collapsed}"></span>
+            </a>
+            <span ng-bind-html="node.title | highlight:pattern  | trust"></span>
+            <span flex></span>
+        </div>
+    </md-button>
+    <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}">
+        <li ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'"
+            ng-hide="!treeFilter(node, pattern, ['title']) && !dim"
+            ng-class="{'filtered-out':!treeFilter(node, pattern, ['title']) && dim}">
+        </li>
+    </ol>
+</script>
+
+<jr-navigation first="项目管理" second="项目数据录入"></jr-navigation>
+<div layout="column" style="background: #E5E9EC;" ng-if="showType == 'pro'">
+    <!-- 上方查询框-->
+    <md-content flex style="background: #E5E9EC;">
+        <md-card style="margin-top: 2px;">
+            <md-card-content>
+                <form name="SearchForm">
+                    <div layout layout-sm="column" class="no-bottom">
+                        <md-input-container flex style="padding-bottom: 1px;">
+                            <label>项目编号：</label>
+                            <!-- 绑定project_id即可 like是模糊查询-->
+                            <input ng-model="obj.searchObj.LIKE$project_id">
+                        </md-input-container>
+                        <md-input-container flex style="padding-bottom: 1px;">
+                            <label>项目名称：</label>
+                            <!-- 绑定project_id即可 like是模糊查询-->
+                            <input ng-model="obj.searchObj.LIKE$project_name">
+                        </md-input-container>
+                        <md-input-container flex style="padding-bottom: 1px;">
+                        </md-input-container>
+                    </div>
+                </form>
+            </md-card-content>
+            <div class="md-actions" layout="row" layout-align="end center">
+                <!-- 查询按钮 点击访问 search（）方法-->
+                <md-button ng-click="search()" class="md-raised" layout layout-align="center end">查询</md-button>
+            </div>
+        </md-card>
+    </md-content>
+    <section layout="row" flex>
+        <md-content flex style="background: #E5E9EC;">
+            <md-card style="margin-top: 2px;">
+                <md-card-content>
+                    <div ui-grid="gridOptions" ui-grid-pagination ui-grid-pinning
+                         ui-grid-resize-columns ui-grid-auto-resize></div>
+                </md-card-content>
+            </md-card>
+        </md-content>
+    </section>
+</div>
+<div layout="column" style="background: #E5E9EC;" ng-init="dim=false;" ng-if="showType == 'tab'">
+    <md-content flex style="background: #E5E9EC;">
+        <md-card style="margin-top: 2px;">
+            <md-card-content>
+                <div style="clear: both">
+                    <div layout="column" style="border-right: 1px solid #267ED5;width: 400px;width: 20%;float: left">
+                        <!--<md-toolbar class="md-theme-light">-->
+                            <!--<div class="md-toolbar-tools" layout-align="left start">-->
+                                <!--<h2 class="md-flex">台账</h2>-->
+                                <!--<span flex></span>-->
+                                <!--查询：-->
+                                <!--<md-input-container flex style="padding-bottom: 1px;color: white;">-->
+                                    <!--<input type="search"  ng-model="pattern" style="color: white;border-bottom-color: white">-->
+                                <!--</md-input-container>-->
+                            <!--</div>-->
+                        <!--</md-toolbar>-->
+                        <md-content layout-padding style="height: 600px;padding: 0px;">
+                            <div ui-tree id="tree-root" data-drag-enabled="false">
+
+                                <ol ui-tree-nodes ng-model="userTabs">
+                                    <li  ng-repeat="node in userTabs" ui-tree-node ng-include="'nodes_renderer.html'"
+                                         ng-hide="!treeFilter(node, pattern,  ['title']) && !dim"
+                                         ng-class="{'filtered-out':!treeFilter(node, pattern,  ['title']) && dim}">
+                                    </li>
+                                </ol>
+                            </div>
+                        </md-content>
+                    </div>
+                    <div  hide-sm layout="column" style="width: 80%;float: left">
+                        <md-toolbar class="md-theme-light">
+                            <div class="md-toolbar-tools" layout-align="center start">
+                                <h2 class="md-flex">{{tabName}}</h2>
+                            </div>
+                        </md-toolbar>
+                        <md-content layout-padding style="height: 600px;padding-top: 40px;">
+
+                            <md-content layout-padding style="height: 600px;padding-top: 40px;">
+                                <md-content layout-padding style="padding-bottom: 10px;">
+                                    <!--<div ui-grid="gridOptions" ui-grid-pagination ui-grid-pinning ui-grid-edit ui-grid-resize-columns class="grid"></div>-->
+                                    <md-card-content>
+                                        <form name="SearchForm">
+                                            <div layout layout-sm="column" class="no-bottom">
+                                                <md-input-container flex style="padding-bottom: 1px;">
+                                                    <label>姓名：</label>
+                                                    <!-- 绑定project_id即可 like是模糊查询-->
+                                                    <input ng-model="searchObj.col_name">
+                                                </md-input-container>
+                                                <md-input-container flex style="padding-bottom: 1px;">
+                                                    <label>电话：</label>
+                                                    <!-- 绑定project_id即可 like是模糊查询-->
+                                                    <input ng-model="searchObj.col_tel">
+                                                </md-input-container>
+                                            </div>
+                                            <div layout layout-sm="column" class="no-bottom">
+                                                <md-input-container flex md-no-float>
+                                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                                       class="md-caption md-primary">
+                                                        渠道公司:</p>
+                                                    <md-select name="colChannel" placeholder="---&nbsp;请选择&nbsp;---" aria-label="渠道公司"
+                                                               ng-model="searchObj.col_channel">
+                                                        <md-option ng-value="">---&nbsp;请选择&nbsp;---</md-option>
+                                                        <md-option ng-repeat="data in searchChannel" ng-value="data.id">{{
+                                                            data.channel_name}}
+                                                        </md-option>
+                                                    </md-select>
+                                                </md-input-container>
+                                                <md-input-container flex md-no-float>
+                                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                                       class="md-caption md-primary">
+                                                        门店:</p>
+                                                    <md-select name="colStore" placeholder="---&nbsp;请选择&nbsp;---" aria-label="门店"
+                                                               ng-model="searchObj.col_store">
+                                                        <md-option ng-value="">---&nbsp;请选择&nbsp;---</md-option>
+                                                        <md-option ng-repeat="data in searchStore" ng-value="data.id">{{
+                                                            data.store_name}}
+                                                        </md-option>
+                                                    </md-select>
+                                                </md-input-container>
+                                            </div>
+                                            <div layout layout-sm="column" class="no-bottom">
+                                                <md-input-container flex style="padding-bottom: 1px;">
+                                                    <label>客户来源：</label>
+                                                    <!-- 绑定project_id即可 like是模糊查询-->
+                                                    <input ng-model="searchObj.col_source">
+                                                </md-input-container>
+                                                <md-input-container flex style="padding-bottom: 1px;">
+                                                    <label>客访单编号：</label>
+                                                    <!-- 绑定project_id即可 like是模糊查询-->
+                                                    <input ng-model="searchObj.col_vcode">
+                                                </md-input-container>
+                                            </div>
+                                        </form>
+                                    </md-card-content>
+                                    <div class="md-actions" layout="row" layout-align="end center">
+                                        <md-button ng-click="goBack()" class="md-raised" style="float: right;">
+                                            返回
+                                        </md-button>
+                                        <md-button ng-click="addProgram()" class="md-raised" ng-if="checkAuth(projectId,tabCode,1) && !checkAuth(projectId,tabCode,5)" style="float: right;">
+                                            添加数据
+                                        </md-button>
+                                        <!-- 导出方法不会写 -->
+                                        <md-button ng-click="export()" class="md-raised" ng-if="checkAuth(projectId,tabCode,6)" layout layout-align="center end">导出</md-button>
+                                        <!-- 查询按钮 点击访问 search（）方法-->
+                                        <md-button ng-click="search2()" class="md-raised" layout layout-align="center end">查询</md-button>
+                                    </div>
+                                    <md-tabs md-dynamic-height md-border-bottom style="height: 800px;">
+                                        <md-tab label="待审" ng-click="changeTab('examine')" ng-if="checkAuth(projectId,tabCode,5)">
+                                            <div ui-grid="gridOptions3" ui-grid-pagination ui-grid-pinning ui-grid-edit ui-grid-resize-columns ui-grid-auto-resize class="grid"></div>
+                                        </md-tab>
+                                        <md-tab label="台账信息" ng-click="changeTab('tab')">
+                                            <div ui-grid="gridOptions2" ui-grid-pagination ui-grid-pinning ui-grid-edit ui-grid-resize-columns ui-grid-auto-resize class="grid"></div>
+                                        </md-tab>
+                                    </md-tabs>
+                                </md-content>
+                            </md-content>
+                        </md-content>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+    </md-content>
+</div>

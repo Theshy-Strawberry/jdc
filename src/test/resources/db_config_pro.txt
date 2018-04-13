@@ -1,0 +1,16 @@
+#正式配置
+conf.devMode = false
+
+db.configs = main
+
+#main
+main.db.type = oracle
+main.db.jdbcUrl = jdbc:oracle:thin:@192.168.1.2:1521:ORCL
+main.db.user = auditsys
+main.db.password = auditsys
+main.db.driverClass = oracle.jdbc.driver.OracleDriver
+
+#参数
+db.initialSize = 50
+db.minIdle = 50
+db.maxActive = 100

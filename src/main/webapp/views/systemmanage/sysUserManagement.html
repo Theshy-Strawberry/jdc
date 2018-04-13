@@ -1,0 +1,132 @@
+<jr-navigation first="系统管理" second="用户管理"></jr-navigation>
+<style>
+    .headerCss{
+        text-align: center;
+    }
+    .cellCss{
+        text-align: center;
+    }
+</style>
+<div layout="column" style="background: #E5E9EC;" ng-controller="SysUserManagementCTRL as ctrl">
+    <md-content flex style="background: #E5E9EC;">
+        <md-card style="margin-top: 2px;">
+            <md-card-content>
+                <form name="SearchForm" >
+                    <div layout layout-sm="column" class="no-bottom">
+                        <md-input-container flex style="padding-bottom: 1px;">
+                            <label>真实姓名</label>
+                            <input ng-model="obj.searchObj.LIKE$real_name">
+                        </md-input-container>
+                        <md-input-container flex style="padding-bottom: 1px;">
+                        </md-input-container>
+                        <md-input-container flex style="padding-bottom: 1px;">
+                        </md-input-container>
+                    </div>
+                </form>
+            </md-card-content>
+            <div class="md-actions" layout="row" layout-align="end center">
+                <md-button ng-click="toggleRight()" ng-if="checkAuth('添加权限','BUTTON')" class="md-raised" layout layout-align="center end">添加</md-button>
+                <md-button ng-click="search()" class="md-raised" layout layout-align="center end">查询</md-button>
+            </div>
+        </md-card>
+    </md-content>
+    <section layout="row" flex>
+        <md-content flex style="background: #E5E9EC;">
+            <md-card style="margin-top: 2px;">
+                <md-card-content>
+                    <div ui-grid="gridOptions" ui-grid-pagination ui-grid-pinning
+                         ui-grid-resize-columns ui-grid-auto-resize></div>
+                </md-card-content>
+            </md-card>
+        </md-content>
+        <md-sidenav class="md-sidenav-right md-whiteframe-z2" style="min-width:800px;" md-component-id="right">
+            <form name="userform">
+                <div layout="column">
+                    <md-content md-theme="docs-dark" layout-padding layout="row" layout-sm="column">
+                        <h2 class="md-toolbar-tools" style="text-align: center;overflow:hidden;color: white;">
+                            <span>编辑用户</span>
+                        </h2>
+                    </md-content>
+                    <md-content layout-padding>
+                        <form>
+                            <input type="hidden" ng-model="userInfo.id">
+                            <div layout layout-sm="column">
+                                <md-input-container flex ng-if="userInfo.id != null">
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        用户名称:<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <input name="user_name" type="text" ng-model="userInfo.user_name" required
+                                           md-maxlength="20" md-minlength="6" ng-pattern="/^[a-zA-Z0-9_]+$/" disabled>
+                                    <div ng-messages="userform.user_name.$error"
+                                         ng-show="userform.user_name.$dirty || userform.user_name.$touched">
+                                        <div ng-message="required">用户名称不能为空</div>
+                                        <div ng-message="md-maxlength">不能超过20个字</div>
+                                        <div ng-message="pattern">用户名称只能输入英文字符下划线或者数字！</div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container flex ng-if="userInfo.id == null">
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        用户名称:<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <input name="user_name" type="text" ng-model="userInfo.user_name" required
+                                           md-maxlength="20" md-minlength="6" ng-pattern="/^[a-zA-Z0-9_]+$/">
+                                    <div ng-messages="userform.user_name.$error"
+                                         ng-show="userform.user_name.$dirty || userform.user_name.$touched">
+                                        <div ng-message="required">用户名称不能为空</div>
+                                        <div ng-message="md-maxlength">不能超过20个字</div>
+                                        <div ng-message="pattern">用户名称只能输入英文字符下划线或者数字！</div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        真实姓名:<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <input name="real_name" type="text" ng-model="userInfo.real_name" required
+                                           md-maxlength="20">
+                                    <div ng-messages="userform.real_name.$error"
+                                         ng-show="userform.real_name.$dirty || userform.real_name.$touched">
+                                        <div ng-message="required">真实姓名不能为空</div>
+                                        <div ng-message="md-maxlength">不能超过20个字</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                            <div layout layout-sm="column">
+                                <md-input-container flex md-no-float>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        手机:</p>
+                                    <input name="telephone" type="text" ng-model="userInfo.telephone"
+                                           md-maxlength="11" ng-pattern="/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/">
+                                    <div ng-messages="userform.telephone.$error"
+                                         ng-show="userform.telephone.$dirty || userform.telephone.$touched">
+                                        <div ng-message="number">手机号码只能输入11位数字！</div>
+                                        <div ng-message="pattern">手机号码格式不正确！</div>
+                                        <div ng-message="md-maxlength">手机号码只能输入11位数字！</div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        邮箱:</p>
+                                    <input name="email" ng-model="userInfo.email"
+                                           md-maxlength="50"  ng-pattern="/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/">
+                                    <div ng-messages="userform.email.$error"
+                                         ng-show="userform.email.$dirty || userform.email.$touched">
+                                        <div ng-message="pattern">邮箱格式不正确！</div>
+                                        <div ng-message="md-maxlength">邮箱最多输入50个字节！</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                        </form>
+                    </md-content>
+                </div>
+            </form>
+            <md-button ng-click="close()" class="md-raised" style="float: right;">
+                关闭
+            </md-button>
+            <md-button ng-click="save()" class="md-raised" style="float: right;">
+                保存
+            </md-button>
+        </md-sidenav>
+    </section>
+</div>

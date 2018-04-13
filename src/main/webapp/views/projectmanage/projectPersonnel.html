@@ -1,0 +1,150 @@
+<jr-navigation first="项目管理" second="项目人员管理"></jr-navigation>
+<style>
+    .headerCss{
+        text-align: center;
+    }
+    .cellCss{
+        text-align: center;
+    }
+</style>
+<div layout="column" style="background: #E5E9EC;" ng-controller="projectPersonnelCTRL as ctrl">
+    <!-- 上方查询框-->
+    <md-content flex style="background: #E5E9EC;">
+        <md-card style="margin-top: 2px;">
+            <md-card-content>
+                <form name="SearchForm">
+                    <div layout layout-sm="column" class="no-bottom">
+                        <md-input-container flex style="padding-bottom: 1px;">
+                            <label>项目名称</label>
+                            <!-- 绑定project_id即可 like是模糊查询-->
+                            <input ng-model="obj.searchObj.LIKE$project_name">
+                        </md-input-container>
+                        <md-input-container flex style="padding-bottom: 1px;"></md-input-container>
+                        <md-input-container flex style="padding-bottom: 1px;"></md-input-container>
+                    </div>
+                </form>
+            </md-card-content>
+            <div class="md-actions" layout="row" layout-align="end center">
+                <!--&lt;!&ndash; 添加按钮 点击跳转 toggleRight（）方法 &ndash;&gt;-->
+                <!--<md-button ng-click="toggleRight()" class="md-raised" layout layout-align="center end">添加</md-button>-->
+                <!-- 查询按钮 点击访问 search（）方法-->
+                <md-button ng-click="search()" class="md-raised" layout layout-align="center end">查询</md-button>
+            </div>
+        </md-card>
+    </md-content>
+    <!--添加界面/修改页面-->
+    <section layout="row" flex>
+        <md-content flex style="background: #E5E9EC;">
+            <md-card style="margin-top: 2px;">
+                <md-card-content>
+                    <div ui-grid="gridOptions" ui-grid-pagination ui-grid-pinning
+                         ui-grid-resize-columns ui-grid-auto-resize></div>
+                </md-card-content>
+            </md-card>
+        </md-content>
+        <md-sidenav class="md-sidenav-right md-whiteframe-z2" style="min-width:800px;" md-component-id="right2">
+            <form name="userform">
+                <div layout="column">
+                    <md-content md-theme="docs-dark" layout-padding layout="row" layout-sm="column">
+                        <h2 class="md-toolbar-tools" style="text-align: center;overflow:hidden;color: white;">
+                            <span>人员管理</span>
+                        </h2>
+                    </md-content>
+                    <md-content layout-padding>
+                        <form>
+                            <input type="hidden" ng-model="obj.object.id">
+                            <md-content flex style="background: #E5E9EC;">
+                                <md-card style="margin-top: 2px;">
+                                    <md-card-content>
+                                        <div ui-grid="gridOptions2" ui-grid-pagination ui-grid-resize-columns ui-grid-pinning ui-grid-auto-resize
+                                             class="grid"></div>
+                                    </md-card-content>
+                                </md-card>
+                            </md-content>
+                        </form>
+                    </md-content>
+                </div>
+            </form>
+            <md-button ng-click="close2()" class="md-raised" style="float: right;">
+                关闭
+            </md-button>
+            <!-- 关闭按钮 访问关闭方法-->
+        </md-sidenav>
+        <md-sidenav class="md-sidenav-right md-whiteframe-z2" style="min-width:800px;" md-component-id="right">
+            <form name="userform">
+                <div layout="column">
+                    <md-content md-theme="docs-dark" layout-padding layout="row" layout-sm="column">
+                        <h2 class="md-toolbar-tools" style="text-align: center;overflow:hidden;color: white;">
+                            <span>人员管理</span>
+                        </h2>
+                    </md-content>
+                    <md-content layout-padding>
+                        <form>
+                            <input type="hidden" ng-model="obj.object.id">
+                            <div ng-repeat="data in datas">
+                                <div flex layout layout-sm="column">
+                                    <md-input-container flex md-no-float>
+                                        <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                           class="md-caption md-primary">
+                                            人员姓名<font style="color: red;margin-left: 4px;">*</font></p>
+                                        <md-select name="user_id" placeholder="---&nbsp;请选择&nbsp;---" aria-label="人员姓名"
+                                                   ng-model="data.user_id">
+                                            <md-option ng-value="">---&nbsp;请选择&nbsp;---</md-option>
+                                            <md-option ng-repeat="userData in userIds" ng-value="userData.id">{{
+                                                userData.real_name}}
+                                            </md-option>
+                                        </md-select>
+
+
+                                    </md-input-container>
+                                    <md-button class="md-primary md-mini md-fab md-fab-right" ng-click="add()">
+                                        +
+                                    </md-button>
+                                    <md-button class="md-primary md-mini md-fab md-fab-right" ng-click="del($index)" ng-if="datas.length>1">
+                                        -
+                                    </md-button>
+                                </div>
+                                <div flex layout ng-if="data.flag">
+                                    <div style="color: red;">请选择人员姓名！</div>
+                                </div>
+                            </div>
+                            <!--<div  layout layout-sm="column" ng-repeat="data in datas">-->
+                                <!--<md-input-container flex md-no-float>-->
+                                    <!--<p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"-->
+                                       <!--class="md-caption md-primary">-->
+                                        <!--人员姓名<font style="color: red;margin-left: 4px;">*</font></p>-->
+                                    <!--<md-select name="user_name" placeholder="-&#45;&#45;&nbsp;请选择&nbsp;-&#45;&#45;" aria-label="人员姓名"-->
+                                               <!--ng-model="data.user_name" required>-->
+                                        <!--<md-option ng-value="">-&#45;&#45;&nbsp;请选择&nbsp;-&#45;&#45;</md-option>-->
+                                        <!--<md-option ng-repeat="userData in userIds" ng-value="userData.user_name">{{-->
+                                            <!--userData.real_name}}-->
+                                        <!--</md-option>-->
+                                    <!--</md-select>-->
+                                    <!--<div ng-messages="userform.user_name.$error"-->
+                                         <!--ng-show="userform.user_name.$dirty || userform.user_name.$touched">-->
+                                        <!--<div ng-message="required">请选择人员姓名！</div>-->
+                                    <!--</div>-->
+
+                                <!--</md-input-container>-->
+                                <!--<md-input-container>-->
+                                    <!--<button ng-click = "add()">+</button>-->
+                                    <!--<button ng-if="datas.length > 1" ng-click = "del(data)">-</button>-->
+                                <!--</md-input-container>-->
+                                <!--<md-input-container flex md-no-float>-->
+                                <!--</md-input-container>-->
+                            <!--</div>-->
+                        </form>
+                    </md-content>
+                </div>
+            </form>
+            <!-- 关闭按钮 访问关闭方法-->
+            <md-button ng-click="close()" class="md-raised" style="float: right;">
+                关闭
+            </md-button>
+            <!-- 保存按钮 访问保存方法-->
+            <md-button ng-click="save()" class="md-raised" style="float: right;">
+                保存
+            </md-button>
+        </md-sidenav>
+    </section>
+</div>

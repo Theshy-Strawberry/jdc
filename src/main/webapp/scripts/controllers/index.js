@@ -1,0 +1,38 @@
+define([
+    './indexController',
+    './loginController',
+    './dashController',
+    //===================================项目管理=============================================
+    './projectmanage/projectBaseManagementController',
+    './projectmanage/recordController',
+    './projectmanage/projectDataTypeManagementController',
+    './projectmanage/projectPersonnelController',
+    './projectmanage/projectSubDataTypeManagementController',
+    //===================================合同管理=============================================
+    './ContractManagement/projectContractController',//渠道项目合同管理
+    './ContractManagement/frameContractController',//渠道框架合同管理
+    //===================================系统管理=============================================
+    './systemmanage/sysUserManagementController',
+    './systemmanage/changePwdController',
+    './systemmanage/sysLogController',
+    './systemmanage/sysRootController',
+    './systemmanage/editUserInfoController',
+    './systemmanage/brokerageTypeController',
+    './systemmanage/editUserInfoController',
+    './systemmanage/businessMainPartController',
+    './systemmanage/productTypeController',
+    './systemmanage/dealWayController',
+    './systemmanage/visitWayController',
+    './systemmanage/paySubjectController',
+    './systemmanage/posInfoController',
+    './systemmanage/jobTitleController',
+    './systemmanage/realEstateController',
+    './systemmanage/posInfoController',
+    './systemmanage/channelInfoController',
+    './systemmanage/sysRegionalManagementController',
+    './systemmanage/dataColController',
+    './systemmanage/dataTabController'
+    //===================================系统管理=============================================
+], function () {
+    // 此处为空,这个文件主要是控制当控制器比较多时可以多加载完毕
+});

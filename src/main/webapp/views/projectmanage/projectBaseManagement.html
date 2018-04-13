@@ -1,0 +1,376 @@
+<jr-navigation first="系统管理" second="项目基础管理"></jr-navigation>
+<style>
+    .headerCss{
+        text-align: center;
+    }
+    .cellCss{
+        text-align: center;
+    }
+</style>
+<div layout="column" style="background: #E5E9EC;" ng-controller="projectBaseManagementCTRL as ctrl">
+    <!-- 上方查询框-->
+    <md-content flex style="background: #E5E9EC;">
+        <md-card style="margin-top: 2px;">
+            <md-card-content>
+                <form name="SearchForm">
+                    <div layout layout-sm="column" class="no-bottom">
+                        <md-input-container flex style="padding-bottom: 1px;">
+                            <label>合同编号</label>
+                            <!-- 绑定project_id即可 like是模糊查询-->
+                            <input ng-model="obj.searchObj.LIKE$project_id">
+                        </md-input-container>
+                        <md-input-container flex style="padding-bottom: 1px;">
+                            <label>项目名称</label>
+                            <!-- 绑定project_id即可 like是模糊查询-->
+                            <input ng-model="obj.searchObj.LIKE$project_name">
+                        </md-input-container>
+                        <md-input-container flex style="padding-bottom: 1px;">
+                            <label>甲方主体</label>
+                            <!-- 绑定project_id即可 like是模糊查询-->
+                            <input ng-model="obj.searchObj.LIKE$first_party_name">
+                        </md-input-container>
+                    </div>
+
+                    <div layout layout-sm="column" class="no-bottom">
+                        <!--style="padding-bottom: 1px;"-->
+                        <md-input-container flex style="padding-bottom: 1px;">
+                            <jr-select label-name="乙方名称" jr-datas="businessMainPart" jr-model="obj.searchObj.EQ$second_party_id"
+                                       show-value="id" show-text="company_name" flex style="padding-bottom: 1px;">
+                            </jr-select>
+                        </md-input-container>
+                        <div flex layout layout-sm="column">
+                            <md-input-container flex style="padding:2px 2px 0px 2px;">
+                                <label>有效期开始时间</label>
+                                <input type="date" name="effective_begin_date"
+                                       ng-model="obj.searchObj.START$effective_begin_date" aria-label="有效期开始时间" >
+                            </md-input-container>
+                            <p style="margin: 0.2em 1em;"><label style="margin-top: 21px;">~</label></p>
+                            <md-input-container flex style="padding:2px 2px 0px 2px;">
+                                <label>有效期结束时间</label>
+                                <input type="date" name="effective_end_date"
+                                       ng-model="obj.searchObj.END$effective_end_date" aria-label="有效期结束时间" >
+                            </md-input-container>
+                            <!--<md-input-container flex style="padding:2px 2px 0px 2px;">-->
+
+                            <!--</md-input-container>-->
+                        </div>
+                        <div  flex layout layout-sm="column"></div>
+                    </div>
+                        <!--<md-input-container flex style="padding-bottom: 1px;">-->
+                                <!--<label>甲方主体：</label>-->
+                                <!--&lt;!&ndash; 绑定project_id即可 like是模糊查询&ndash;&gt;-->
+                                <!--<input ng-model="obj.searchObj.LIKE$first_party_name">-->
+                        <!--</md-input-container>-->
+                        <!--<md-input-container flex style="padding-bottom: 1px;">-->
+                            <!--<jr-select label-name="乙方名称" jr-datas="businessMainPart" jr-model="obj.searchObj.EQ$second_party_id"-->
+                                       <!--show-value="id" show-text="company_name" flex style="padding-bottom: 1px;">-->
+                            <!--</jr-select>-->
+                        <!--</md-input-container>-->
+
+                        <!-- select下拉列表 适用于上方查询框 jr-datas指定selectData.(routes.js 最下面自己配置的内容) EQ是精准查询 -->
+
+                        <!--<jr-select label-name="甲方主体" jr-datas="selectData.typeOfBrokerageType" jr-model="obj.searchObj.EQ$calculate_type"-->
+                                   <!--show-value="id" show-text="text" flex style="padding-bottom: 1px;">-->
+                        <!--</jr-select>-->
+
+                        <!-- 有效期-->
+                        <!--<div layout layout-sm="column" class="no-bottom">-->
+                            <!--<div flex layout layout-sm="column">-->
+                                <!--<md-input-container flex style="padding:2px 2px 0px 2px;">-->
+                                    <!--<label>有效期开始时间：</label>-->
+                                    <!--<input type="date" name="effective_begin_date"-->
+                                           <!--ng-model="obj.searchObj.LIKE$effective_begin_date" aria-label="有效期开始时间" >-->
+                                <!--</md-input-container>-->
+                                <!--<p style="margin: 0.2em 1em;"><label style="margin-top: 21px;">~</label></p>-->
+                                <!--<md-input-container flex style="padding:2px 2px 0px 2px;">-->
+                                    <!--<label>有效期结束时间：</label>-->
+                                    <!--<input type="date" name="effective_end_date"-->
+                                           <!--ng-model="obj.searchObj.LIKE$effective_end_date" aria-label="有效期结束时间" >-->
+                                <!--</md-input-container>-->
+                            <!--</div>-->
+                            <!--<div flex layout layout-sm="column">-->
+                                <!--<md-input-container flex style="padding:2px 2px 0px 2px;">-->
+                                <!--</md-input-container>-->
+                                <!--<md-input-container flex style="padding:2px 2px 0px 2px;">-->
+                                <!--</md-input-container>-->
+                            <!--</div>-->
+                            <!--</div>-->
+
+                        <!--<md-input-container flex style="padding-bottom: 1px;"></md-input-container>-->
+                    <!--</div>-->
+                </form>
+            </md-card-content>
+            <div class="md-actions" layout="row" layout-align="end center">
+                <!-- 导出方法不会写 -->
+                <!--<md-button ng-click="" class="md-raised" layout layout-align="center end">导出</md-button>-->
+                <!-- 添加按钮 点击跳转 toggleRight（）方法 -->
+                <md-button ng-click="toggleRight()" ng-if="checkAuth('添加权限','BUTTON')" class="md-raised" layout layout-align="center end">添加</md-button>
+                <!-- 查询按钮 点击访问 search（）方法-->
+                <md-button ng-click="search()" class="md-raised" layout layout-align="center end">查询</md-button>
+            </div>
+        </md-card>
+    </md-content>
+    <!--添加界面/修改页面-->
+    <section layout="row" flex>
+        <md-content flex style="background: #E5E9EC;">
+            <md-card style="margin-top: 2px;">
+                <md-card-content>
+                    <div ui-grid="gridOptions" ui-grid-pagination ui-grid-pinning
+                         ui-grid-resize-columns ui-grid-auto-resize></div>
+                </md-card-content>
+            </md-card>
+        </md-content>
+        <md-sidenav class="md-sidenav-right md-whiteframe-z2" style="min-width:800px;" md-component-id="right">
+            <form name="user_form">
+                <div layout="column">
+                    <md-content md-theme="docs-dark" layout-padding layout="row" layout-sm="column">
+                        <h2 class="md-toolbar-tools" style="text-align: center;overflow:hidden;color: white;">
+                            <span>编辑项目基础信息</span>
+                        </h2>
+                    </md-content>
+                    <md-content layout-padding>
+                        <form>
+                            <input type="hidden" ng-model="obj.object.id">
+                            <div layout layout-sm="column">
+                                <md-input-container flex>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        合同编号：<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <input name="project_id" type="text" ng-model="obj.object.project_id" md-maxlength="50" required>
+                                           <!--ng-pattern="/^[\u4e00-\u9fa5a-zA-Z0-9]+$/" -->
+                                    <div ng-messages="user_form.project_id.$error"
+                                         ng-show="user_form.project_id.$dirty || user_form.project_id.$touched">
+                                        <div ng-message="required">请输入合同编号！</div>
+                                        <div ng-message="md-maxlength">合同编号不能超过50个字节！</div>
+                                        <!--<div ng-message="pattern">合同编号只能输入中英文字符或者数字！</div>-->
+                                    </div>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        项目名称:<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <input name="project_name" type="text" ng-model="obj.object.project_name"
+                                             md-maxlength="50" required>
+                                    <div ng-messages="user_form.project_name.$error"
+                                         ng-show="user_form.project_name.$dirty || user_form.project_name.$touched">
+                                        <div ng-message="required">请输入项目名称！</div>
+                                        <div ng-message="md-maxlength">项目名称不能超过50个字节！</div>
+                                        <!--<div ng-message="pattern">项目名称只能输入中英文字符或者数字！</div>-->
+                                    </div>
+                                </md-input-container>
+                            </div>
+                            <div layout layout-sm="column">
+                                <md-input-container flex>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        甲方主体:<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <input name="first_party_name" type="text" ng-model="obj.object.first_party_name"
+                                            md-maxlength="50" required>
+                                    <div ng-messages="user_form.first_party_name.$error"
+                                         ng-show="user_form.first_party_name.$dirty || user_form.first_party_name.$touched">
+                                        <div ng-message="required">请输入甲方主体！</div>
+                                        <div ng-message="md-maxlength">甲方主体不能超过50个字节！</div>
+                                        <!--<div ng-message="pattern">甲方主体只能输入中英文字符或者数字！</div>-->
+                                    </div>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <!--<p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"-->
+                                       <!--class="md-caption md-primary">-->
+                                        <!--乙方名称:<font style="color: red;margin-left: 4px;">*</font></p>-->
+                                    <!--<input name="second_party_name" type="text" ng-model="obj.object.second_party_name"-->
+                                           <!--ng-maxlength="50" ng-pattern="/^[\u4e00-\u9fa5a-zA-Z0-9]+$/" md-maxlength="50" required>-->
+                                    <!--<div ng-messages="user_form.second_party_name.$error"-->
+                                         <!--ng-show="user_form.second_party_name.$dirty || user_form.second_party_name.$touched">-->
+                                        <!--<div ng-message="required">请输入乙方名称！！</div>-->
+                                        <!--<div ng-message="maxlength">乙方名称不能超过50个字节！</div>-->
+                                        <!--<div ng-message="pattern">乙方名称只能输入中英文字符或者数字！</div>-->
+                                    <!--</div>-->
+                                    <!--<md-input-container flex md-no-float>-->
+                                        <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                           class="md-caption md-primary">
+                                            乙方名称<font style="color: red;margin-left: 4px;">*</font></p>
+                                        <md-select name="second_party_id" placeholder="---&nbsp;请选择&nbsp;---" aria-label="乙方名称"
+                                                   ng-model="obj.object.second_party_id" required>
+                                            <md-option ng-value="">---&nbsp;请选择&nbsp;---</md-option>
+                                            <md-option ng-repeat="data in businessMainPart" ng-value="data.id">{{
+                                                data.company_name}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="user_form.second_party_id.$error"
+                                             ng-show="user_form.second_party_id.$dirty || user_form.second_party_id.$touched">
+                                            <div ng-message="required">请选择乙方名称！</div>
+                                        </div>
+                                <!--</md-input-container>-->
+                               </md-input-container>
+                            </div>
+                            <div layout layout-sm="column">
+                                <md-input-container flex>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        甲方联系人:
+                                        <!--<font style="color: red;margin-left: 4px;">*</font>-->
+                                    </p>
+                                    <input name="first_party_person" type="text" ng-model="obj.object.first_party_person"
+                                            md-maxlength="20">
+                                    <div ng-messages="user_form.first_party_person.$error"
+                                         ng-show="user_form.first_party_person.$dirty || user_form.first_party_person.$touched">
+                                        <!--<div ng-message="required">请输入甲方联系人！</div>-->
+                                        <div ng-message="md-maxlength">甲方联系人不能超过20个字节！</div>
+                                        <!--<div ng-message="pattern">甲方联系人只能输入中英文字符或者数字！</div>-->
+                                    </div>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        我方联系人:
+                                        <!--<font style="color: red;margin-left: 4px;">*</font>-->
+                                    </p>
+                                    <input name="my_person" type="text" ng-model="obj.object.my_person"
+                                             md-maxlength="20">
+                                    <div ng-messages="user_form.my_person.$error"
+                                         ng-show="user_form.my_person.$dirty || user_form.my_person.$touched">
+                                        <!--<div ng-message="required">请输入我方联系人！</div>-->
+                                        <div ng-message="md-maxlength">我方联系人不能超过20个字节！</div>
+                                        <!--<div ng-message="pattern">我方联系人只能输入中英文字符或者数字！</div>-->
+                                    </div>
+                                </md-input-container>
+                                </div>
+                            <div layout layout-sm="column">
+                                <md-input-container flex>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        甲方联系方式:
+                                        <!--<font style="color: red;margin-left: 4px;">*</font>-->
+                                    </p>
+                                    <input name="first_party_person_telephone" type="text" ng-model="obj.object.first_party_person_telephone"
+                                            md-maxlength="11">
+                                    <div ng-messages="user_form.first_party_person_telephone.$error"
+                                         ng-show="user_form.first_party_person_telephone.$dirty || user_form.first_party_person_telephone.$touched">
+                                        <!--<div ng-message="required">请输入甲方联系方式！！</div>-->
+                                        <div ng-message="md-maxlength">甲方联系方式不能超过11个字节！</div>
+                                        <!--<div ng-message="pattern">甲方联系人方式只能输入中英文字符或者数字！</div>-->
+                                    </div>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        我方联系方式:
+                                        <!--<font style="color: red;margin-left: 4px;">*</font>-->
+                                    </p>
+                                    <input name="my_person_telephone" type="text" ng-model="obj.object.my_person_telephone"
+                                            md-maxlength="11">
+                                    <div ng-messages="user_form.my_person_telephone.$error"
+                                         ng-show="user_form.my_person_telephone.$dirty || user_form.my_person_telephone.$touched">
+                                        <!--<div ng-message="required">请输入我方联系方式！</div>-->
+                                        <div ng-message="md-maxlength">我方联系方式不能超过11个字节！</div>
+                                        <!--<div ng-message="pattern">我方联系方式只能输入中英文字符或者数字！</div>-->
+                                    </div>
+                                </md-input-container>
+                                </div>
+                            <!-- 有效期开始时间 和有效期结束时间-->
+                            <div flex class="no-bottom" style="padding-bottom: 1px;">
+                                <div flex layout layout-sm="column">
+                                    <md-input-container flex style="padding:2px 2px 0px 2px;">
+                                        <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                           class="md-caption md-primary">
+                                            有效期开始时间:<font style="color: red;margin-left: 4px;">*</font></p>
+                                        <input type="date" name="effective_begin_date"
+                                               ng-model="obj.object.effective_begin_date" aria-label="有效期开始时间" required>
+                                        <div ng-messages="user_form.effective_begin_date.$error"
+                                             ng-show="user_form.effective_begin_date.$dirty || user_form.effective_begin_date.$touched">
+                                            <div ng-message="required">请输入有效期开始时间！</div>
+                                        </div>
+                                    </md-input-container>
+                                        <p style="margin: 0.2em 1em;"><label style="margin-top: 21px;">~</label></p>
+                                    <md-input-container flex style="padding:2px 2px 0px 2px;">
+                                        <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                           class="md-caption md-primary">
+                                            有效期结束时间:<font style="color: red;margin-left: 4px;">*</font></p>
+                                        <input type="date" name="effective_end_date"
+                                               ng-model="obj.object.effective_end_date" aria-label="有效期结束时间" required>
+                                        <div ng-messages="user_form.effective_end_date.$error"
+                                             ng-show="user_form.effective_end_date.$dirty || user_form.effective_end_date.$touched">
+                                            <div ng-message="required">请输入有效期结束时间！</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                            </div>
+                                <!-- 开始时间必须早于结束时间的验证 写在html div模块里 -->
+                                <!--<div ng-messages="obj.object.effective_begin_date.$error" class="ng-active" flex>-->
+                                    <!--<div ng-messages="obj.object.effective_end_date.$error" class="ng-active" flex>-->
+                                    <!--&lt;!&ndash;<div ng-if="obj.object.effective_begin_date = !null && obj.object.effective_end_date = !null && (obj.object.effective_end_date-obj.object.create_date<0)" class="ng-scope"&ndash;&gt;-->
+                                         <!--&lt;!&ndash;style="color: rgb(244,67,54);font-size: 12px;">&ndash;&gt;-->
+                                        <!--&lt;!&ndash;有效期结束日期只可选择晚于开始日期的时间！&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                <!--</div>-->
+                            <div layout layout-sm="column">
+                                <md-input-container flex>
+                                    <!--<p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"-->
+                                       <!--class="md-caption md-primary">-->
+                                        <!--计算方式:<font style="color: red;margin-left: 4px;">*</font></p>-->
+                                    <!--&lt;!&ndash; 右面弹出界面用的下拉列表&ndash;&gt;-->
+                                    <!--<md-select name="calculate_type" placeholder="-&#45;&#45;&nbsp;请选择&nbsp;-&#45;&#45;" aria-label="计算方式"-->
+                                               <!--ng-model="obj.object.calculate_type" required>-->
+                                        <!--<md-option ng-value="">-&#45;&#45;&nbsp;请选择&nbsp;-&#45;&#45;</md-option>-->
+                                        <!--<md-option ng-repeat="data in selectData.typeOfBrokerageType" ng-value="data.id">{{-->
+                                            <!--data.text}}-->
+                                        <!--</md-option>-->
+                                    <!--</md-select>-->
+                                    <!--&lt;!&ndash; 下拉列表验证&ndash;&gt;-->
+                                    <!--<div ng-messages="user_form.calculate_type.$error"-->
+                                         <!--ng-show="user_form.calculate_type.$dirty || user_form.calculate_type.$touched">-->
+                                        <!--<div ng-message="required">请选择计算方式！！</div>-->
+                                    <!--</div>-->
+                                </md-input-container>
+                            </div>
+
+                            <!-- 创建人 创建时间 修改人 修改时间 备用不动-->
+
+                            <!-- 添加界面可以见 opFlg==1 不可改动-->
+                            <!--<div layout layout-sm="column" ng-if="opFlg==1">-->
+                                <!--<md-input-container flex md-no-float>-->
+                                    <!--<p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"-->
+                                       <!--class="md-caption md-primary">-->
+                                        <!--创建人:<font style="color: red;margin-left: 4px;"></font></p>-->
+                                    <!--<input name="create_user" type="text" ng-model="obj.object.create_user" disabled="disabled">-->
+                                <!--</md-input-container>-->
+                                <!--<md-input-container flex md-no-float>-->
+                                    <!--<p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"-->
+                                       <!--class="md-caption md-primary">-->
+                                        <!--创建时间:<font style="color: red;margin-left: 4px;"></font></p>-->
+                                    <!--&lt;!&ndash; 创建时间 日期格式化&ndash;&gt;-->
+                                    <!--<input name="create_date" type="text"  ng-model="obj.object.create_date" disabled="disabled">-->
+                                <!--</md-input-container>-->
+                            <!--</div>-->
+                            <!-- 添加界面可以见 opFlg==2 不可改动 -->
+                            <!--<div layout layout-sm="column" ng-show="obj.object.id"  ng-if="opFlg==2">-->
+                                <!--<md-input-container flex md-no-float>-->
+                                    <!--<p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"-->
+                                       <!--class="md-caption md-primary">-->
+                                        <!--修改人:<font style="color: red;margin-left: 4px;"></font></p>-->
+                                    <!--<input name="modify_user" type="text" ng-model="obj.object.modify_user" disabled="disabled">-->
+                                <!--</md-input-container>-->
+                                <!--<md-input-container flex md-no-float>-->
+                                    <!--<p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"-->
+                                       <!--class="md-caption md-primary">-->
+                                        <!--修改时间:<font style="color: red;margin-left: 4px;"></font></p>-->
+                                    <!--&lt;!&ndash; 修改时间 日期格式化&ndash;&gt;-->
+                                    <!--<input name="modify_date" type="text"  ng-model="obj.object.modify_date" disabled="disabled">-->
+                                <!--</md-input-container>-->
+                            <!--</div>-->
+                        </form>
+                    </md-content>
+                </div>
+            </form>
+            <!-- 关闭按钮 访问关闭方法-->
+            <md-button ng-click="close()" class="md-raised" style="float: right;">
+                关闭
+            </md-button>
+            <!-- 保存按钮 访问保存方法-->
+            <md-button ng-click="save()" class="md-raised" style="float: right;">
+                保存
+            </md-button>
+        </md-sidenav>
+    </section>
+</div>

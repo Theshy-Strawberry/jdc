@@ -1,0 +1,174 @@
+<jr-navigation first="系统管理" second="地域管理" ></jr-navigation>
+<style>
+    .headerCss{
+        text-align: center;
+    }
+    .cellCss{
+        text-align: center;
+    }
+</style>
+<div layout="column" style="background: #E5E9EC;" ng-controller="sysRegionalManagementCTRL as ctrl">
+
+    <md-content flex style="background: #E5E9EC;">
+        <md-card style="margin-top: 2px;">
+            <md-input-container flex style="padding-bottom: 1px;">
+
+                <label>
+                    <font size="5">中国</font><font size="5">{{provinceName}}</font><font size="5">{{cityName}}</font><font size="5">{{districtName}}</font>
+                </label>
+                <!--<input type="text"  ng-model="supperName">-->
+
+
+            </md-input-container>
+            <md-card-content>
+                <form name="SearchForm" >
+                    <div layout layout-sm="column" class="no-bottom">
+                        <md-input-container flex style="padding-bottom: 1px;">
+                            <label>地区名称</label>
+                            <input ng-model="obj.searchObj.LIKE$name">
+                        </md-input-container>
+                        <md-input-container flex style="padding-bottom: 1px;">
+                        </md-input-container>
+                        <md-input-container flex style="padding-bottom: 1px;">
+                        </md-input-container>
+                    </div>
+                </form>
+            </md-card-content>
+
+            <div class="md-actions" layout="row" layout-align="end center">
+                <input type="hidden"  ng-model="reg_level">
+                <md-button ng-click="returnSupperPage()" ng-show="retureturnSupperPagernShow" name="retureturnSupperPagern"  class="md-raised" layout layout-align="center start">返回</md-button>
+                <md-button ng-click="toggleRight()" ng-if="checkAuth('添加权限','BUTTON')" class="md-raised" layout layout-align="center end">添加</md-button>
+                <md-button ng-click="search()" class="md-raised" layout layout-align="center end">查询</md-button>
+            </div>
+
+        </md-card>
+    </md-content>
+    <section layout="row" flex>
+        <md-content flex style="background: #E5E9EC;">
+            <md-card style="margin-top: 2px;">
+                <md-card-content>
+                    <div ui-grid="gridOptions" ui-grid-pagination ui-grid-pinning
+                         ui-grid-resize-columns ui-grid-auto-resize></div>
+                </md-card-content>
+            </md-card>
+        </md-content>
+        <md-sidenav class="md-sidenav-right md-whiteframe-z2" style="min-width:800px;" md-component-id="right">
+            <form name="sysregionalmanagementform">
+                <div layout="column">
+                    <md-content md-theme="docs-dark" layout-padding layout="row" layout-sm="column">
+                        <h2 class="md-toolbar-tools" style="text-align: center;overflow:hidden;color: white;">
+                            <span>编辑地域</span>
+                        </h2>
+                    </md-content>
+                    <md-content layout-padding>
+                        <form>
+                            <input type="hidden" ng-model="sysRegionalManagementInfo.id">
+
+                            <div layout layout-sm="column" >
+                                <md-input-container flex>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        名称:<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <input name="name" type="text" md-sidenav-focus  ng-model="sysRegionalManagementInfo.name" required
+                                           md-maxlength="30" md-minlength="6" ng-pattern="/^[\u4e00-\u9fa5]+$/">
+
+                                    <div ng-messages="sysregionalmanagementform.name.$error"
+                                         ng-show="sysregionalmanagementform.name.$dirty || sysregionalmanagementform.name.$touched">
+                                        <div ng-message="required">名称不为能空</div>
+                                        <div ng-message="md-minlength" >经度最小6位</div>
+                                        <div ng-message="md-maxlength" >经度最大30位</div>
+                                        <div ng-message="pattern">名称只能为中文</div>
+
+                                    </div>
+                                </md-input-container>
+                                <!--<md-input-container flex>-->
+                                    <!--<p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"-->
+                                       <!--class="md-caption md-primary">-->
+                                        <!--经度:<font style="color: red;margin-left: 4px;">*</font></p>-->
+                                    <!--<input name="longitude" type="text" ng-model="sysRegionalManagementInfo.longitude" required-->
+                                           <!--md-maxlength="100" md-minlength="3">-->
+                                    <!--<div ng-messages="sysregionalmanagementform.longitude.$error"-->
+                                         <!--ng-show="sysregionalmanagementform.longitude.$dirty || sysregionalmanagementform.longitude.$touched">-->
+                                        <!--<div ng-message="required">经度不能为空</div>-->
+                                        <!--<div ng-message="md-minlength" >经度最小3位</div>-->
+                                        <!--<div ng-message="md-maxlength" >经度最大100位</div>-->
+
+                                    <!--</div>-->
+                                <!--</md-input-container>-->
+                                <!--<md-input-container flex>-->
+                                    <!--<p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"-->
+                                       <!--class="md-caption md-primary">-->
+                                        <!--纬度:<font style="color: red;margin-left: 4px;">*</font></p>-->
+                                    <!--<input name="latitude" type="text" ng-model="sysRegionalManagementInfo.latitude" required-->
+                                           <!--md-maxlength="100" md-minlength="3">-->
+                                    <!--<div ng-messages="sysregionalmanagementform.latitude.$error"-->
+                                         <!--ng-show="sysregionalmanagementform.latitude.$dirty || sysregionalmanagementform.latitude.$touched">-->
+                                        <!--<div ng-message="required">纬度不能为空</div>-->
+                                        <!--<div ng-message="md-minlength" >纬度最小3位</div>-->
+                                        <!--<div ng-message="md-maxlength" >纬度最大100位</div>-->
+
+                                    <!--</div>-->
+                                <!--</md-input-container>-->
+                            </div>
+                            <!--<div layout layout-sm="column" >-->
+                                <!--<md-input-container flex>-->
+                                    <!--<p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"-->
+                                       <!--class="md-caption md-primary">-->
+                                        <!--地域等级:<font style="color: red;margin-left: 4px;">*</font></p>-->
+
+                                    <!--<input name="order_number" type="text"  ng-model="sysRegionalManagementInfo.order_number" required-->
+                                           <!--md-minlength="1"   md-maxlength="3" ng-pattern="/[0-9]/">-->
+
+                                    <!--<div ng-messages="sysregionalmanagementform.order_number.$error"-->
+                                         <!--ng-show="sysregionalmanagementform.order_number.$dirty || sysregionalmanagementform.order_number.$touched">-->
+                                        <!--<div ng-message="required" >地域等级不能为空</div>-->
+                                        <!--<div ng-message="md-maxlength" >地域等级最大三位</div>-->
+                                        <!--<div ng-message="md-minlength" >地域等级不能为空</div>-->
+                                        <!--<div ng-message="pattern" >地域等级只能为数字</div>-->
+                                    <!--</div>-->
+                                <!--</md-input-container>-->
+                            <!--</div>-->
+                            <!--<div ng-show="starForm" layout layout-sm="column" >-->
+                                <!--<md-input-container flex>-->
+                                    <!--<p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"-->
+                                       <!--class="md-caption md-primary">-->
+                                        <!--是否为热门城市:<font style="color: red;margin-left: 4px;">*</font></p>-->
+                                    <!--<md-radio-group layout="row" name = "is_star" ng-model="sysRegionalManagementInfo.is_star">-->
+                                        <!--<md-radio-button value="1">是</md-radio-button>-->
+                                        <!--<md-radio-button value="2">否</md-radio-button>-->
+
+                                    <!--</md-radio-group>-->
+                                    <!--<div ng-messages="sysregionalmanagementform.is_star.$error"-->
+                                         <!--ng-show="sysregionalmanagementform.is_star.$dirty || sysregionalmanagementform.is_star.$touched">-->
+                                        <!--<div ng-message="required">必须选择是否为热门城市</div>-->
+                                    <!--</div>-->
+                                <!--</md-input-container>-->
+                                <!--<md-input-container flex>-->
+                                    <!--<p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"-->
+                                       <!--class="md-caption md-primary">-->
+                                        <!--区位号:<font style="color: red;margin-left: 4px;">*</font></p>-->
+                                    <!--<input name="location_number" type="text"  ng-model="sysRegionalManagementInfo.location_number" required-->
+                                           <!--md-maxlength="4" ng-pattern="/[0-9]/">-->
+
+                                    <!--<div ng-messages="sysregionalmanagementform.location_number.$error"-->
+                                         <!--ng-show="sysregionalmanagementform.location_number.$dirty || sysregionalmanagementform.location_number.$touched">-->
+                                        <!--<div ng-message="required" >区位号不能为空</div>-->
+                                        <!--<div ng-message="md-maxlength" >区位号最大为4位</div>-->
+                                        <!--<div ng-message="pattern" >区位号只能为数字</div>-->
+                                    <!--</div>-->
+                                <!--</md-input-container>-->
+                            <!--</div>-->
+                        </form>
+                    </md-content>
+                </div>
+            </form>
+            <md-button ng-click="close()" class="md-raised" style="float: right;">
+                关闭
+            </md-button>
+            <md-button ng-click="save()" class="md-raised" style="float: right;">
+                保存
+            </md-button>
+        </md-sidenav>
+    </section>
+</div>

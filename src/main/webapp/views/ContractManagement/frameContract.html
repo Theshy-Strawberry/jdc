@@ -1,0 +1,241 @@
+<jr-navigation first="合同管理" second="渠道框架合同管理"></jr-navigation>
+<style>
+    .headerCss{
+        text-align: center;
+    }
+    .cellCss{
+        text-align: center;
+    }
+</style>
+<div layout="column" style="background: #E5E9EC;" ng-controller="frameContractCTRL as ctrl">
+    <md-content flex style="background: #E5E9EC;">
+        <md-card style="margin-top: 2px;">
+            <md-card-content>
+                <form name="SearchForm">
+                    <div layout layout-sm="column" class="no-bottom">
+                        <jr-select label-name="甲方主体" jr-datas="mainPartNames" jr-model="obj.searchObj.EQ$main_part_id"
+                                   show-value="id" show-text="company_name" flex style="padding-bottom: 1px;">
+                        </jr-select>
+                        <jr-select label-name="渠道" jr-datas="channelNames" jr-model="obj.searchObj.EQ$channel_id"
+                                   show-value="id" show-text="channel_name" flex style="padding-bottom: 1px;">
+                        </jr-select>
+                        <jr-select label-name="门店" jr-datas="storeNames" jr-model="obj.searchObj.EQ$store_id"
+                                   show-value="id" show-text="store_name" flex style="padding-bottom: 1px;">
+                        </jr-select>
+                    </div>
+                    <div layout layout-sm="column" class="no-bottom">
+                        <div flex class="no-bottom" style="padding-bottom: 1px;">
+                            <div flex layout layout-sm="column">
+                                <md-input-container flex style="padding:2px 2px 0px 2px;">
+                                    <label>有效期开始时间</label>
+                                    <input type="date" name="expiry_begin"
+                                           ng-model="obj.searchObj.START$expiry_begin" aria-label="有效期开始时间" >
+                                </md-input-container>
+                                <p style="margin: 0.2em 1em;"><label style="margin-top: 21px;">~</label></p>
+                                <md-input-container flex style="padding:2px 2px 0px 2px;">
+                                    <label>有效期结束时间</label>
+                                    <input type="date" name="expiry_end"
+                                           ng-model="obj.searchObj.END$expiry_end" aria-label="有效期结束时间" >
+                                </md-input-container>
+                            </div>
+                                    <div ng-messages="SearchForm.expiry_end.$error" class="ng-active" flex>
+                                        <div ng-if="obj.searchObj.LIKE$expiry_begin != null && obj.searchObj.LIKE$expiry_end != null && (obj.searchObj.LIKE$expiry_end-obj.searchObj.LIKE$expiry_begin<0)" class="ng-scope"
+                                             style="color: rgb(244,67,54);font-size: 12px;">
+                                            结束日期只可选择晚于开始日期的时间！</div>
+                                    </div>
+                            </div>
+                           <md-input-container flex style="padding-bottom: 1px;">
+                                    <label>联系人</label>
+                                    <input ng-model="obj.searchObj.LIKE$first_contact">
+                           </md-input-container>
+                           <md-input-container flex style="padding-bottom: 1px;">
+                                    <label>联系方式</label>
+                                    <input ng-model="obj.searchObj.LIKE$first_contact_info">
+                           </md-input-container>
+                    </div>
+                </form>
+            </md-card-content>
+            <div class="md-actions" layout="row" layout-align="end center">
+                <!--<md-button class="md-raised" layout layout-align="center end">导出</md-button>-->
+                <md-button ng-click="toggleRight()" ng-if="checkAuth('添加权限','BUTTON')" class="md-raised" layout layout-align="center end">添加</md-button>
+                <md-button ng-click="search()" class="md-raised" layout layout-align="center end">查询</md-button>
+            </div>
+        </md-card>
+    </md-content>
+    <section layout="row" flex>
+        <md-content flex style="background: #E5E9EC;">
+            <md-card style="margin-top: 2px;">
+                <md-card-content>
+                    <div ui-grid="gridOptions" ui-grid-pagination ui-grid-pinning
+                         ui-grid-resize-columns ui-grid-auto-resize></div>
+                </md-card-content>
+            </md-card>
+        </md-content>
+        <md-sidenav class="md-sidenav-right md-whiteframe-z2" style="min-width:800px;" md-component-id="right">
+            <form name="user_form">
+                <div layout="column">
+                    <md-content md-theme="docs-dark" layout-padding layout="row" layout-sm="column">
+                        <h2 class="md-toolbar-tools" style="text-align: center;overflow:hidden;color: white;">
+                            <span>编辑渠道框架合同信息</span>
+                        </h2>
+                    </md-content>
+                    <md-content layout-padding>
+                        <form>
+                            <input type="hidden" ng-model="obj.object.id">
+                            <div layout layout-sm="column">
+                                <md-input-container flex md-no-float>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        合同编号:<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <input name="contract_number" type="text" ng-model="obj.object.contract_number"
+                                           md-maxlength="50" required>
+                                    <div ng-messages="user_form.contract_number.$error"
+                                         ng-show="user_form.contract_number.$dirty || user_form.contract_number.$touched">
+                                        <div ng-message="required">请输入合同编号！</div>
+                                        <div ng-message="md-maxlength">合同编号不能超过50个字节！</div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container flex md-no-float>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        甲方主体:<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <md-select name="main_part_id" placeholder="---&nbsp;请选择&nbsp;---" aria-label="甲方主体"
+                                               ng-model="obj.object.main_part_id" required>
+                                        <md-option ng-value="">---&nbsp;请选择&nbsp;---</md-option>
+                                        <md-option ng-repeat="data in mainPartNames" ng-value="data.id">{{
+                                            data.company_name}}
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="user_form.main_part_id.$error"
+                                         ng-show="user_form.main_part_id.$dirty || user_form.main_part_id.$touched">
+                                        <div ng-message="required">请选择甲方主体名称！</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                            <div layout layout-sm="column">
+                                <div flex class="no-bottom" style="padding-bottom: 1px;">
+                                    <div flex layout layout-sm="column">
+                                        <md-input-container flex style="padding:2px 2px 0px 2px;">
+                                            <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                               class="md-caption md-primary">
+                                                有效期开始时间:<font style="color: red;margin-left: 4px;">*</font></p>
+                                            <input type="date" name="expiry_begin"
+                                                   ng-model="obj.object.expiry_begin" aria-label="有效期开始时间" required>
+                                            <div ng-messages="user_form.expiry_begin.$error"
+                                                 ng-show="user_form.expiry_begin.$dirty || user_form.expiry_begin.$touched">
+                                                <div ng-message="required">请选择有效期开始时间！</div>
+                                            </div>
+                                        </md-input-container>
+                                        <p style="margin: 0.2em 1em;"><label style="margin-top: 21px;">~</label></p>
+                                        <md-input-container flex style="padding:2px 2px 0px 2px;">
+                                            <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                               class="md-caption md-primary">
+                                                有效期结束时间:<font style="color: red;margin-left: 4px;">*</font></p>
+                                            <input type="date" name="expiry_end"
+                                                   ng-model="obj.object.expiry_end" aria-label="有效期结束时间" required >
+                                            <div ng-messages="user_form.expiry_end.$error"
+                                                 ng-show="user_form.expiry_end.$dirty || user_form.expiry_end.$touched">
+                                                <div ng-message="required">请选择有效期结束时间！</div>
+                                                <div ng-messages="user_form.expiry_end.$error" class="ng-active" flex>
+                                                    <div ng-if="user_form.expiry_begin != null && user_form.expiry_end != null && (user_form.expiry_end-user_form.expiry_begin<0)" class="ng-scope"
+                                                         style="color: rgb(244,67,54);font-size: 12px;">
+                                                        结束日期只可选择晚于开始日期的时间！</div>
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                </div>
+                                <md-input-container flex md-no-float>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        渠道名称:<font style="color: red;margin-left: 4px;">*</font></p>
+                                    <md-select name="channel_id" placeholder="---&nbsp;请选择&nbsp;---" aria-label="渠道名称"
+                                               ng-model="obj.object.channel_id" required>
+                                        <md-option ng-value="">---&nbsp;请选择&nbsp;---</md-option>
+                                        <md-option ng-repeat="data in channelNames" ng-value="data.id">{{
+                                            data.channel_name}}
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="user_form.channel_id.$error"
+                                         ng-show="user_form.channel_id.$dirty || user_form.channel_id.$touched">
+                                        <div ng-message="required">请选择渠道名称！</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                            <div layout layout-sm="column">
+                                <md-input-container flex md-no-float>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        门店:<font style="color: red;margin-left: 4px;"></font></p>
+                                    <md-select name="store_id" placeholder="---&nbsp;请选择&nbsp;---" aria-label="门店"
+                                               ng-model="obj.object.store_id">
+                                        <md-option ng-value="">---&nbsp;请选择&nbsp;---</md-option>
+                                        <md-option ng-repeat="data in storeNames" ng-value="data.id">{{
+                                            data.store_name}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                                <md-input-container flex md-no-float>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        甲方联系人:<font style="color: red;margin-left: 4px;"></font></p>
+                                    <input name="first_contact" type="text" ng-model="obj.object.first_contact"
+                                           md-maxlength="20">
+                                    <div ng-messages="user_form.first_contact.$error"
+                                         ng-show="user_form.first_contact.$dirty || user_form.first_contact.$touched">
+                                        <div ng-message="md-maxlength">甲方联系人不能超过20个字节！</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                            <div layout layout-sm="column">
+                                <md-input-container flex md-no-float>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        乙方联系人:<font style="color: red;margin-left: 4px;"></font></p>
+                                    <input name="second_contact" type="text" ng-model="obj.object.second_contact"
+                                           md-maxlength="20">
+                                    <div ng-messages="user_form.second_contact.$error"
+                                         ng-show="user_form.second_contact.$dirty || user_form.second_contact.$touched">
+                                        <div ng-message="md-maxlength">乙方联系人不能超过20个字节！</div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container flex md-no-float>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        甲方联系方式:<font style="color: red;margin-left: 4px;"></font></p>
+                                    <input name="first_contact_info" type="text" ng-model="obj.object.first_contact_info"
+                                           md-maxlength="50">
+                                    <div ng-messages="user_form.first_contact_info.$error"
+                                         ng-show="user_form.first_contact_info.$dirty || user_form.first_contact_info.$touched">
+                                        <div ng-message="md-maxlength">甲方联系方式不能超过50个字节！</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                            <div layout layout-sm="column">
+                                <md-input-container flex md-no-float>
+                                    <p style="margin:0px;font-weight:bold;font-size:0.4em;color: #3F51B5;"
+                                       class="md-caption md-primary">
+                                        乙方联系方式:<font style="color: red;margin-left: 4px;"></font></p>
+                                    <input name="second_contact_info" type="text" ng-model="obj.object.second_contact_info"
+                                           md-maxlength="50">
+                                    <div ng-messages="user_form.second_contact_info.$error"
+                                         ng-show="user_form.second_contact_info.$dirty || user_form.second_contact_info.$touched">
+                                        <div ng-message="md-maxlength">乙方联系方式不能超过50个字节！</div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container flex md-no-float>
+                                </md-input-container>
+                            </div>
+                        </form>
+                    </md-content>
+                </div>
+            </form>
+            <md-button ng-click="close()" class="md-raised" style="float: right;">
+                关闭
+            </md-button>
+            <md-button ng-click="save()" class="md-raised" style="float: right;">
+                保存
+            </md-button>
+        </md-sidenav>
+    </section>
+</div>
